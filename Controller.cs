@@ -22,7 +22,7 @@ class Controller : INotifyPropertyChanged
         get => _lambdaIndex;
         set
         {
-            if (_lambdaIndex >= 0 && _lambdaIndex < _settings.Lambdas.Length)
+            if (_lambdaIndex >= 0 && _lambdaIndex < _settings.Lambdas.Count)
             {
                 _lambdaIndex = value;
                 _lambda = _settings.Lambdas[_lambdaIndex];

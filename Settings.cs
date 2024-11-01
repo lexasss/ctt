@@ -11,6 +11,7 @@ class Settings
     public double FarLineWidth { get; set; } = 15;
     public double FarThreshold { get; set; } = 100;
     public List<double> Lambdas { get; set; } = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5];
+    public string LogFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
     // Internal
 
