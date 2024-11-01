@@ -1,0 +1,75 @@
+﻿<Window x:Class="CTT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CTT"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="CTT"
+        Height="600"
+        Width="800"
+        PreviewKeyDown="Window_PreviewKeyDown">
+    
+    <Window.Resources>
+        <local:OrientationToVisibilityConverter x:Key="ort2vis"/>
+        <local:HalfValueConverter x:Key="halfVal"/>
+        <local:NumberToStringConverter x:Key="num2str"/>
+
+        <system:String x:Key="vertical">vertical</system:String>
+        <system:String x:Key="horizontal">horizontal</system:String>
+        <system:Int32 x:Key="twoDigits">2</system:Int32>
+    </Window.Resources>
+    
+    <Grid>
+        <Border BorderBrush="Gray"
+                BorderThickness="1"
+                Width="500"
+                Height="500">
+            <Canvas x:Name="canvas">
+                <Line x:Name="lineCenter"
+                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
+                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
+                      Stroke="Black"
+                      StrokeThickness="1"
+                      X1="0"
+                      X2="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
+                      Y1="{Binding ActualHeight, ElementName=canvas, Mode=OneWay, Converter={StaticResource halfVal}}"
+                      Y2="{Binding ActualHeight, ElementName=canvas, Mode=OneWay, Converter={StaticResource halfVal}}"/>
+                <Line x:Name="lineHorizontal"
+                      Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource vertical}}"
+                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
+                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
+                      StrokeEndLineCap="Round"
+                      Stroke="{Binding LineColor, Mode=OneWay}"
+                      StrokeThickness="{Binding LineWidth, Mode=OneWay}"
+                      X1="0"
+                      X2="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
+                      Y1="{Binding LinePositionY, Mode=OneWay}"
+                      Y2="{Binding LinePositionY, Mode=OneWay}"/>
+                <Line x:Name="lineVertical"
+                      Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource horizontal}}"
+                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
+                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
+                      StrokeEndLineCap="Round"
+                      Stroke="{Binding LineColor, Mode=OneWay}"
+                      StrokeThickness="{Binding LineWidth, Mode=OneWay}"
+                      X1="{Binding LinePositionX, Mode=OneWay}"
+                      X2="{Binding LinePositionX, Mode=OneWay}"
+                      Y1="0"
+                      Y2="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"/>
+            </Canvas>
+        </Border>
+
+        <WrapPanel VerticalAlignment="Top"
+                    HorizontalAlignment="Center">
+            <Label Content="Lambda: "/>
+            <Label Content="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"/>
+        </WrapPanel>
+
+        <StackPanel VerticalAlignment="Bottom"
+                    HorizontalAlignment="Center">
+            <Label Content="Press 1-9 to set the lambda, ENTER to restart, ESC to exit"/>
+        </StackPanel>
+    </Grid>
+</Window>
