@@ -7,6 +7,8 @@ class Joystick : Input
 {
     public string[] Effects => _joystick.GetEffects().Select(effect => effect.Name).ToArray();
 
+    public override InputType Type => InputType.Joystick;
+
     public Joystick(int deviceIndex) : base()
     {
         if (_devices == null)
@@ -53,12 +55,12 @@ class Joystick : Input
             var datas = _joystick.GetBufferedData();
             if (datas.Length > 0)
             {
-                foreach (var state in datas)
+                foreach (var data in datas)
                 {
-                    if (state.Offset == JoystickOffset.X)
-                        _x = (double)(state.Value - 0x8000) / 0x8000;
-                    else if (state.Offset == JoystickOffset.Y)
-                        _y = (double)(state.Value - 0x8000) / 0x8000;
+                    if (data.Offset == JoystickOffset.X)
+                        _x = (double)(data.Value - 0x8000) / 0x8000;
+                    else if (data.Offset == JoystickOffset.Y)
+                        _y = (double)(data.Value - 0x8000) / 0x8000;
                 }
             }
 

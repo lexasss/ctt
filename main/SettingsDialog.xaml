@@ -6,9 +6,10 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:CTT"
+        xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="Settings"
-        Height="380"
+        Height="450"
         Width="250"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -20,6 +21,13 @@
         <local:BrushToColorConverter x:Key="brush2color"/>
         <local:ListOfDoublesToStringConverter  x:Key="dbl2string"/>
         <local:PathUIConverter x:Key="pathUI"/>
+
+        <ObjectDataProvider x:Key="inputTypes" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="inputs:InputType"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
 
         <Style TargetType="Separator">
             <Setter Property="Margin" Value="4"/>
@@ -56,6 +64,11 @@
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Width" Value="56"/>
         </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -66,6 +79,16 @@
 
         <StackPanel Grid.Row="0"
                     Margin="4">
+            <Grid>
+                <Label>Input</Label>
+                <ComboBox Width="80"
+                          HorizontalAlignment="Right"
+                          ItemsSource="{Binding Source={StaticResource inputTypes}}"
+                          SelectedItem="{Binding Path=Input}"/>
+            </Grid>
+
+            <Separator/>
+            
             <Grid>
                 <Label>Field size, px</Label>
                 <TextBox x:Name="txbFieldSize">

@@ -2,8 +2,16 @@
 
 namespace CTT.Inputs;
 
-abstract class Input
+enum InputType
 {
+    Mouse,
+    Joystick
+}
+
+abstract class Input : IDisposable
+{
+    public abstract InputType Type { get; }
+
     public event EventHandler<Point>? Updated;
 
     public Input()
@@ -12,6 +20,11 @@ abstract class Input
         _timer.AutoReset = true;
         _timer.Elapsed += (s, e) => Updated?.Invoke(this, new Point(_x, _y));
         _timer.Start();
+    }
+
+    public void Dispose()
+    {
+        _timer.Dispose();
     }
 
     // Internal

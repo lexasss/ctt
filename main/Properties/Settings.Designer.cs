@@ -130,5 +130,17 @@ namespace CTT.Properties {
                 this["FieldSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Input {
+            get {
+                return ((int)(this["Input"]));
+            }
+            set {
+                this["Input"] = value;
+            }
+        }
     }
 }
