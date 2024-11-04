@@ -2,9 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace CTT;
 
+[ValueConversion(typeof(Orientation), typeof(Visibility))]
 class OrientationToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -26,6 +28,7 @@ class OrientationToVisibilityConverter : IValueConverter
     }
 }
 
+[ValueConversion(typeof(double), typeof(double))]
 class HalfValueConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,6 +42,7 @@ class HalfValueConverter : IValueConverter
     }
 }
 
+[ValueConversion(typeof(double), typeof(string))]
 class NumberToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -51,4 +55,45 @@ class NumberToStringConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+}
+
+/*
+[ValueConversion(typeof(SolidColorBrush), typeof(Brush))]
+public class ColorBrushConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (Brush)value;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => (SolidColorBrush)value;
+}*/
+
+[ValueConversion(typeof(SolidColorBrush), typeof(Color))]
+public class BrushToColorConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((SolidColorBrush)value).Color;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new SolidColorBrush((Color)value);
+}
+
+[ValueConversion(typeof(string), typeof(string))]
+public class PathUIConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        string.IsNullOrEmpty((string)value) ? "[not selected yet]" : value;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => value;
+}
+
+[ValueConversion(typeof(double[]), typeof(string))]
+public class ListOfDoublesToStringConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        string.Join(" ", (double[])value);
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        ((string)value)
+            .Split(" ")
+            .Where(item => !string.IsNullOrEmpty(item))
+            .Select(item => double.TryParse(item, out double number) ? number : 0)
+            .Where(number => number > 0)
+            .ToArray();
 }

@@ -22,18 +22,18 @@ class Controller : INotifyPropertyChanged
         get => _lambdaIndex;
         set
         {
-            if (_lambdaIndex >= 0 && _lambdaIndex < _settings.Lambdas.Count)
+            if (_lambdaIndex >= 0 && _lambdaIndex < _settings.Lambdas.Length)
             {
                 _lambdaIndex = value;
                 _lambda = _settings.Lambdas[_lambdaIndex];
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Lambda)));
-                Reset();
             }
         }
     }
 
     public double Lambda => _lambda;
 
+    public bool IsRunning => _isRunning;
 
     public double LinePositionX { get; private set; } = 0;
     public double LinePositionY { get; private set; } = 0;
@@ -103,6 +103,8 @@ class Controller : INotifyPropertyChanged
         var isFar = Math.Abs(_offset) > _settings.FarThreshold;
         if ((isFar && !_isFar) || (!isFar && _isFar))
             UpdateDistanceCategory(isFar);
+
+        _logger.Add(_lambda, _offset.ToString("F1"), inputValue.ToString("F4"));
     }
 
     // Internal
@@ -115,6 +117,7 @@ class Controller : INotifyPropertyChanged
 
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
+    readonly Logger _logger = Logger.Instance;
     readonly FrameworkElement _line;
     readonly FrameworkElement _container;
 

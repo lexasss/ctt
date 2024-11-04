@@ -19,11 +19,12 @@ public partial class MainWindow : Window
             _joystick.Updated += Joystick_Updated;
         }
 
-        _controller.ReStart();
+        _settings.Updated += Settings_Updated;
     }
 
     // Internal
 
+    readonly Settings _settings = Settings.Instance;
     readonly Controller _controller;
     readonly Inputs.Input? _joystick;
 
@@ -32,15 +33,25 @@ public partial class MainWindow : Window
         _controller.Update(e);
     }
 
+    private void Settings_Updated(object? sender, EventArgs e)
+    {
+        Background = _settings.BackgroundColor;
+
+        var canvasCenterY = canvas.ActualHeight / 2;
+        lineTopThreshold.Y1 = canvasCenterY - _settings.FarThreshold;
+        lineTopThreshold.Y2 = canvasCenterY - _settings.FarThreshold;
+        lineBottomThreshold.Y1 = canvasCenterY + _settings.FarThreshold;
+        lineBottomThreshold.Y2 = canvasCenterY + _settings.FarThreshold;
+    }
+
     private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
         if (e.Key == System.Windows.Input.Key.Enter)
         {
-            _controller.ReStart();
-        }
-        else if (e.Key == System.Windows.Input.Key.D0 || e.Key == System.Windows.Input.Key.NumPad0)
-        {
-            _controller.Stop();
+            if (_controller.IsRunning)
+                _controller.Stop();
+            else
+                _controller.ReStart();
         }
         else if (e.Key == System.Windows.Input.Key.Escape)
         {
@@ -54,5 +65,23 @@ public partial class MainWindow : Window
         {
             _controller.LambdaIndex = e.Key - System.Windows.Input.Key.NumPad1;
         }
+        else if (e.Key == System.Windows.Input.Key.F2)
+        {
+            if (!_controller.IsRunning)
+                _settings.ShowDialog();
+        }
+    }
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        Settings_Updated(this, EventArgs.Empty);
+    }
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+        _controller.Stop();
+        _settings.Save();
+
+        Logger.Instance.Save();
     }
 }

@@ -9,7 +9,9 @@
         Title="CTT"
         Height="600"
         Width="800"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        Icon="/assets/images/icon.png"
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Closed="Window_Closed" Loaded="Window_Loaded">
     
     <Window.Resources>
         <local:OrientationToVisibilityConverter x:Key="ort2vis"/>
@@ -60,6 +62,21 @@
                       Y2="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"/>
             </Canvas>
         </Border>
+        
+        <Line x:Name="lineTopThreshold"
+                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
+                      Width="40"
+                      Stroke="#FF1E88FF"
+                      StrokeThickness="1"
+                      X1="0"
+                      X2="40"/>
+        <Line x:Name="lineBottomThreshold"
+                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
+                      Width="40"
+                      Stroke="#FF1E88FF"
+                      StrokeThickness="1"
+                      X1="0"
+                      X2="40"/>
 
         <WrapPanel VerticalAlignment="Top"
                     HorizontalAlignment="Center">
@@ -69,7 +86,7 @@
 
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Center">
-            <Label Content="Press 1-9 to set the lambda, ENTER to restart, ESC to exit"/>
+            <Label Content="Press 1-9 to set the lambda, F2 to edit settings, ENTER to start/stop, ESC to exit"/>
         </StackPanel>
     </Grid>
 </Window>
