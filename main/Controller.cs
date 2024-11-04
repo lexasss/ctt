@@ -7,15 +7,7 @@ namespace CTT;
 
 class Controller : INotifyPropertyChanged
 {
-    public Orientation Orientation
-    {
-        get => _orientation;
-        set
-        {
-            _orientation = value;
-            Reset();
-        }
-    }
+    public Orientation Orientation => _orientation;
 
     public int LambdaIndex
     {
@@ -42,12 +34,10 @@ class Controller : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    public Controller(FrameworkElement line)
+    public Controller()
     {
-        _line = line;
-
-        _container = _line.Parent as FrameworkElement ?? Application.Current.MainWindow;
-        _container.SizeChanged += Container_SizeChanged;
+        _orientation = _settings.Orientation;
+        _settings.Updated += Settings_Updated;
 
         _noisePhase = _random.NextDouble();
 
@@ -55,6 +45,8 @@ class Controller : INotifyPropertyChanged
 
         LineColor = _settings.LineColor;
         LineWidth = _settings.LineWidth;
+
+        Reset();
     }
 
     public void Start()
@@ -99,7 +91,7 @@ class Controller : INotifyPropertyChanged
         {
             LinePositionY = _ref + _offset;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LinePositionY)));
-            System.Diagnostics.Debug.WriteLine($"Y={input.Y:F3} >> {_offset:F3} >> {LinePositionY:F3}");
+            //System.Diagnostics.Debug.WriteLine($"Y={input.Y:F3} >> {_offset:F3} >> {LinePositionY:F3}");
         }
 
         var isFar = Math.Abs(_offset) > _settings.FarThreshold;
@@ -120,10 +112,8 @@ class Controller : INotifyPropertyChanged
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
     readonly Logger _logger = Logger.Instance;
-    readonly FrameworkElement _line;
-    readonly FrameworkElement _container;
 
-    Orientation _orientation = Orientation.Vertical;
+    Orientation _orientation;
     int _lambdaIndex = 0;
     double _lambda;
 
@@ -133,7 +123,6 @@ class Controller : INotifyPropertyChanged
     double _noise = 0;
 
     double _ref = 0;
-    double _containerSize = 0;
 
     double _offset = 0;
 
@@ -144,9 +133,7 @@ class Controller : INotifyPropertyChanged
         _noisePhase = _random.NextDouble();
         _noise = 0;
 
-        _containerSize = _orientation == Orientation.Horizontal ? _container.ActualWidth : _container.ActualHeight;
-
-        _ref = _containerSize / 2;
+        _ref = _settings.FieldSize / 2;
         _offset = 0;
 
         LinePositionX = _ref;
@@ -177,8 +164,14 @@ class Controller : INotifyPropertyChanged
             offset = _ref;
     }
 
-    private void Container_SizeChanged(object sender, SizeChangedEventArgs e)
+    private void Settings_Updated(object? sender, EventArgs e)
     {
+        if (_orientation != _settings.Orientation)
+        {
+            _orientation = _settings.Orientation;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Orientation)));
+        }
+
         Reset();
     }
 }

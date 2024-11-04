@@ -42,3 +42,9 @@ internal static class SolidColorBrushExt
             .ToDictionary(prop => prop.Name,
                           prop => prop.GetValue(null) is Color color ? color : Colors.Black );
 }
+
+internal static class DoubleExt
+{
+    public static double ToRange(this double self, double min, double max) => Math.Max(min, Math.Min(self, max));
+}
+

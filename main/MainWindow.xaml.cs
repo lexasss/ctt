@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using SharpDX.DirectInput;
+using System.Windows;
 
 namespace CTT;
 
@@ -8,7 +9,7 @@ public partial class MainWindow : Window
     {
         InitializeComponent();
 
-        _controller = new Controller(lineHorizontal);
+        _controller = new Controller();
         DataContext = _controller;
 
         CreateInput();
@@ -25,46 +26,35 @@ public partial class MainWindow : Window
 
     private void CreateInput()
     {
+        DeviceInstance[] inputDevices;
+
         if (_settings.Input == Inputs.InputType.Mouse)
-        {
-            var mouseDevices = Inputs.Mouse.ListDevices();
-
-            if (mouseDevices.Length > 0)
-            {
-                _input = new Inputs.Mouse(0);
-            }
-            else
-            {
-                MessageBox.Show("No mice found. Please connect and restart the application, or choose another input.",
-                    App.Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+            inputDevices = Inputs.Mouse.ListDevices();
         else if (_settings.Input == Inputs.InputType.Joystick)
-        {
-            var joystictDevices = Inputs.Joystick.ListDevices();
+            inputDevices = Inputs.Joystick.ListDevices();
+        else
+            throw new NotSupportedException("Input type is not supported.");
 
-            if (joystictDevices.Length > 0)
-            {
+        if (inputDevices.Length > 0)
+        {
+            if (_settings.Input == Inputs.InputType.Mouse)
+                _input = new Inputs.Mouse(0);
+            else if (_settings.Input == Inputs.InputType.Joystick)
                 _input = new Inputs.Joystick(0);
-            }
-            else
-            {
-                MessageBox.Show("No joysticks found. Please connect and restart the application, or choose another input.", 
-                    App.Name, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
         else
         {
-            throw new NotSupportedException("Input type is not supported.");
+            MessageBox.Show($"No device if type '{_settings.Input}' found. Please connect and restart the application, or choose another input.",
+                    App.Name, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         if (_input != null)
         {
-            _input.Updated += Joystick_Updated;
+            _input.Updated += Input_Updated;
         }
     }
 
-    private void Joystick_Updated(object? sender, Point e)
+    private void Input_Updated(object? sender, Point e)
     {
         _controller.Update(e);
     }
@@ -122,11 +112,17 @@ public partial class MainWindow : Window
 
     private void Container_SizeChanged(object sender, SizeChangedEventArgs? e)
     {
-        var canvasCenterY = canvas.ActualHeight / 2;
-        lineTopThreshold.Y1 = canvasCenterY - _settings.FarThreshold;
-        lineTopThreshold.Y2 = canvasCenterY - _settings.FarThreshold;
-        lineBottomThreshold.Y1 = canvasCenterY + _settings.FarThreshold;
-        lineBottomThreshold.Y2 = canvasCenterY + _settings.FarThreshold;
+        var canvasCenterY = brdContainer.ActualHeight / 2;
+        lineHorzTopThreshold.Y1 = canvasCenterY - _settings.FarThreshold;
+        lineHorzTopThreshold.Y2 = canvasCenterY - _settings.FarThreshold;
+        lineHorzBottomThreshold.Y1 = canvasCenterY + _settings.FarThreshold;
+        lineHorzBottomThreshold.Y2 = canvasCenterY + _settings.FarThreshold;
+
+        var canvasCenterX = brdContainer.ActualWidth / 2;
+        lineVertLeftThreshold.X1 = canvasCenterX - _settings.FarThreshold;
+        lineVertLeftThreshold.X2 = canvasCenterX - _settings.FarThreshold;
+        lineVertRightThreshold.X1 = canvasCenterX + _settings.FarThreshold;
+        lineVertRightThreshold.X2 = canvasCenterX + _settings.FarThreshold;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

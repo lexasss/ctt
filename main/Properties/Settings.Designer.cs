@@ -142,5 +142,17 @@ namespace CTT.Properties {
                 this["Input"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Orientation {
+            get {
+                return ((int)(this["Orientation"]));
+            }
+            set {
+                this["Orientation"] = value;
+            }
+        }
     }
 }

@@ -24,6 +24,40 @@
         <system:String x:Key="vertical">vertical</system:String>
         <system:String x:Key="horizontal">horizontal</system:String>
         <system:Int32 x:Key="twoDigits">2</system:Int32>
+
+        <Style x:Key="controlledLine" TargetType="Line">
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
+            <Setter Property="Stroke" Value="{Binding LineColor, Mode=OneWay}"/>
+            <Setter Property="StrokeThickness" Value="{Binding LineWidth, Mode=OneWay}"/>
+        </Style>
+
+        <Style x:Key="centerLine" TargetType="Line">
+            <Setter Property="Stroke" Value="Black"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
+        </Style>
+
+        <Style x:Key="thresholdLine" TargetType="Line">
+            <Setter Property="Stroke" Value="#FF1E88FF"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="horzThresholdLine" TargetType="Line" BasedOn="{StaticResource thresholdLine}">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="X1" Value="0"/>
+            <Setter Property="X2" Value="{Binding ActualWidth, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+        </Style>
+
+        <Style x:Key="vertThresholdLine" TargetType="Line" BasedOn="{StaticResource thresholdLine}">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Y1" Value="0"/>
+            <Setter Property="Y2" Value="{Binding ActualHeight, RelativeSource={RelativeSource Self}}"/>
+            <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
+        </Style>
     </Window.Resources>
     
     <Grid>
@@ -32,55 +66,49 @@
                 Width="500"
                 Height="500"
                 SizeChanged="Container_SizeChanged">
-            <Canvas x:Name="canvas">
-                <Line x:Name="lineCenter"
-                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
-                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
-                      Stroke="Black"
-                      StrokeThickness="1"
-                      X1="0"
-                      X2="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
-                      Y1="{Binding ActualHeight, ElementName=canvas, Mode=OneWay, Converter={StaticResource halfVal}}"
-                      Y2="{Binding ActualHeight, ElementName=canvas, Mode=OneWay, Converter={StaticResource halfVal}}"/>
-                <Line x:Name="lineHorizontal"
-                      Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource vertical}}"
-                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
-                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
-                      StrokeEndLineCap="Round"
-                      Stroke="{Binding LineColor, Mode=OneWay}"
-                      StrokeThickness="{Binding LineWidth, Mode=OneWay}"
-                      X1="0"
-                      X2="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
-                      Y1="{Binding LinePositionY, Mode=OneWay}"
-                      Y2="{Binding LinePositionY, Mode=OneWay}"/>
-                <Line x:Name="lineVertical"
-                      Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource horizontal}}"
-                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
-                      Width="{Binding ActualWidth, ElementName=canvas, Mode=OneWay}"
-                      StrokeEndLineCap="Round"
-                      Stroke="{Binding LineColor, Mode=OneWay}"
-                      StrokeThickness="{Binding LineWidth, Mode=OneWay}"
-                      X1="{Binding LinePositionX, Mode=OneWay}"
-                      X2="{Binding LinePositionX, Mode=OneWay}"
-                      Y1="0"
-                      Y2="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"/>
-            </Canvas>
+            <Grid>
+                <Grid Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource vertical}}">
+                    <Line x:Name="lineHorzCenter"
+                          Style="{StaticResource centerLine}"
+                          X1="0"
+                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"
+                          Y1="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
+                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"/>
+                    <Line x:Name="lineHorzTopThreshold"
+                          Style="{StaticResource horzThresholdLine}"
+                          Height="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+                    <Line x:Name="lineHorzBottomThreshold"
+                          Style="{StaticResource horzThresholdLine}"
+                          Height="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+                    <Line x:Name="lineHorizontal"
+                          Style="{StaticResource controlledLine}"
+                          X1="0"
+                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"
+                          Y1="{Binding LinePositionY, Mode=OneWay}"
+                          Y2="{Binding LinePositionY, Mode=OneWay}"/>
+                </Grid>
+                <Grid Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource horizontal}}">
+                    <Line x:Name="lineVertCenter"
+                          Style="{StaticResource centerLine}"
+                          X1="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
+                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
+                          Y1="0"
+                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+                    <Line x:Name="lineVertLeftThreshold"
+                          Style="{StaticResource vertThresholdLine}"
+                          Width="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
+                    <Line x:Name="lineVertRightThreshold"
+                          Style="{StaticResource vertThresholdLine}"
+                          Width="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
+                    <Line x:Name="lineVertical"
+                          Style="{StaticResource controlledLine}"
+                          X1="{Binding LinePositionX, Mode=OneWay}"
+                          X2="{Binding LinePositionX, Mode=OneWay}"
+                          Y1="0"
+                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+                </Grid>
+            </Grid>
         </Border>
-        
-        <Line x:Name="lineTopThreshold"
-                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
-                      Width="40"
-                      Stroke="#FF1E88FF"
-                      StrokeThickness="1"
-                      X1="0"
-                      X2="40"/>
-        <Line x:Name="lineBottomThreshold"
-                      Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
-                      Width="40"
-                      Stroke="#FF1E88FF"
-                      StrokeThickness="1"
-                      X1="0"
-                      X2="40"/>
 
         <WrapPanel VerticalAlignment="Top"
                    HorizontalAlignment="Center">

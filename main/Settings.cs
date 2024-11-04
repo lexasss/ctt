@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Text.Json;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace CTT;
@@ -17,6 +18,7 @@ class Settings : INotifyPropertyChanged
     public double FieldSize { get; set; }
     public double[] Lambdas { get; set; }
     public Inputs.InputType Input { get; set; }
+    public Orientation Orientation { get; set; }
 
     public string LogFolder
     {
@@ -59,6 +61,7 @@ class Settings : INotifyPropertyChanged
 
         settings.Lambdas = JsonSerializer.Serialize(Lambdas);
         settings.Input = (int)Input;
+        settings.Orientation = (int)Orientation;
 
         settings.LogFolder = LogFolder;
 
@@ -107,6 +110,7 @@ class Settings : INotifyPropertyChanged
         }
 
         Input = (Inputs.InputType)settings.Input;
+        Orientation = (Orientation)settings.Orientation;
 
         _logFolder = settings.LogFolder;
     }

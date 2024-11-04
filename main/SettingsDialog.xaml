@@ -4,13 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:ctrls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:CTT"
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="Settings"
-        Height="450"
-        Width="250"
+        Height="460"
+        Width="270"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
         SizeToContent="Height"
@@ -29,6 +30,13 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+        <ObjectDataProvider x:Key="orientType" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="ctrls:Orientation"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
         <Style TargetType="Separator">
             <Setter Property="Margin" Value="4"/>
         </Style>
@@ -39,7 +47,7 @@
         </Style>
         <Style x:Key="Iconic" TargetType="Button">
             <Setter Property="Width" Value="28"/>
-            <Setter Property="Height" Value="28 "/>
+            <Setter Property="Height" Value="28"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -55,6 +63,7 @@
         <Style TargetType="TextBox">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Height" Value="26"/>
             <Setter Property="Width" Value="56"/>
             <Setter Property="Margin" Value="2"/>
         </Style>
@@ -62,6 +71,7 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="2"/>
+            <Setter Property="Height" Value="26"/>
             <Setter Property="Width" Value="56"/>
         </Style>
         <Style TargetType="ComboBox">
@@ -88,7 +98,14 @@
             </Grid>
 
             <Separator/>
-            
+
+            <Grid>
+                <Label>Orientation</Label>
+                <ComboBox Width="80"
+                          HorizontalAlignment="Right"
+                          ItemsSource="{Binding Source={StaticResource orientType}}"
+                          SelectedItem="{Binding Path=Orientation}"/>
+            </Grid>
             <Grid>
                 <Label>Field size, px</Label>
                 <TextBox x:Name="txbFieldSize">

@@ -87,7 +87,7 @@ class Mouse : Input
                         if (_isLeftButtonPressed)
                         {
                             _relX += data.Value;
-                            _x = _movementScale * _relX;
+                            _x = (_movementScale * _relX).ToRange(-1, 1);
                         }
                     }
                     else if (data.Offset == MouseOffset.Y)
@@ -95,7 +95,7 @@ class Mouse : Input
                         if (_isLeftButtonPressed)
                         {
                             _relY += data.Value;
-                            _y = _movementScale * _relY;
+                            _y = (_movementScale * _relY).ToRange(-1, 1);
                         }
                     }
                 }
