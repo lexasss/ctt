@@ -74,38 +74,39 @@ class Controller : INotifyPropertyChanged
         if (!_isRunning)
             return;
 
-        _noisePhase += K_NOISE_STEP;
-        _noise = (Math.Cos(_noisePhase) * 2 - 1) * K_NOISE_GAIN;
+        _noisePhase += K_NOISE_PHASE_STEP;
+        _noise = (Math.Cos(_noisePhase) * 2 - 1) * K_NOISE_GAIN +
+                 (Math.Cos(_noisePhase * 2) * 2 - 1) * K_NOISE_GAIN / 2;
 
         var inputValue = _orientation == Orientation.Horizontal ? input.X : input.Y;
-        var speed = (_offset * K_OFFSET_GAIN + inputValue * K_INPUT_GAIN + _noise) * _lambda * K_SPEED;
-        _offset += speed;
-        AssureIsVisible(ref _offset);
+        var speed = (_offset * K_OFFSET_GAIN + inputValue * K_INPUT_GAIN + _noise) * _lambda * K_SPEED / _ref;
+        _offset = (_offset + speed).ToRange(-1, 1);
 
+        var offsetPixels = _offset * _ref;
         if (_orientation == Orientation.Horizontal)
         {
-            LinePositionX = _ref + _offset;
+            LinePositionX = _ref + offsetPixels;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LinePositionX)));
         }
         else
         {
-            LinePositionY = _ref + _offset;
+            LinePositionY = _ref + offsetPixels;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LinePositionY)));
             //System.Diagnostics.Debug.WriteLine($"Y={input.Y:F3} >> {_offset:F3} >> {LinePositionY:F3}");
         }
 
-        var isFar = Math.Abs(_offset) > _settings.FarThreshold;
+        var isFar = Math.Abs(offsetPixels) > _settings.FarThreshold;
         if ((isFar && !_isFar) || (!isFar && _isFar))
             UpdateDistanceCategory(isFar);
 
-        _logger.Add(_lambda, (_offset / _ref).ToString("F4"), inputValue.ToString("F4"));
+        _logger.Add(_lambda, _offset.ToString("F4"), inputValue.ToString("F4"));
     }
 
     // Internal
 
     const double K_NOISE_GAIN = 0.6;
-    const double K_NOISE_STEP = 0.008;
-    const double K_OFFSET_GAIN = 0.1;
+    const double K_NOISE_PHASE_STEP = 0.008;
+    const double K_OFFSET_GAIN = 25;
     const double K_INPUT_GAIN = 50;
     const double K_SPEED = 0.2;
 
@@ -154,14 +155,6 @@ class Controller : INotifyPropertyChanged
 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LineColor)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LineWidth)));
-    }
-
-    private void AssureIsVisible(ref double offset)
-    {
-        if (offset < -_ref)
-            offset = -_ref;
-        else if (offset > _ref)
-            offset = _ref;
     }
 
     private void Settings_Updated(object? sender, EventArgs e)
