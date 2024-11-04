@@ -57,9 +57,10 @@ class Controller : INotifyPropertyChanged
         LineWidth = _settings.LineWidth;
     }
 
-    public void ReStart()
+    public void Start()
     {
         _isRunning = true;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
         Reset();
     }
@@ -67,6 +68,7 @@ class Controller : INotifyPropertyChanged
     public void Stop()
     {
         _isRunning = false;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
         Reset();
     }
@@ -104,7 +106,7 @@ class Controller : INotifyPropertyChanged
         if ((isFar && !_isFar) || (!isFar && _isFar))
             UpdateDistanceCategory(isFar);
 
-        _logger.Add(_lambda, _offset.ToString("F1"), inputValue.ToString("F4"));
+        _logger.Add(_lambda, (_offset / _ref).ToString("F4"), inputValue.ToString("F4"));
     }
 
     // Internal

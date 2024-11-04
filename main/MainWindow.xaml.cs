@@ -37,11 +37,13 @@ public partial class MainWindow : Window
     {
         Background = _settings.BackgroundColor;
 
-        var canvasCenterY = canvas.ActualHeight / 2;
-        lineTopThreshold.Y1 = canvasCenterY - _settings.FarThreshold;
-        lineTopThreshold.Y2 = canvasCenterY - _settings.FarThreshold;
-        lineBottomThreshold.Y1 = canvasCenterY + _settings.FarThreshold;
-        lineBottomThreshold.Y2 = canvasCenterY + _settings.FarThreshold;
+        MinWidth = _settings.FieldSize + 16;        // SystemInformation does not contain proper numbers
+        MinHeight = _settings.FieldSize + 40;
+
+        brdContainer.Width = _settings.FieldSize;
+        brdContainer.Height = _settings.FieldSize;
+
+        Container_SizeChanged(this, null);
     }
 
     private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -51,7 +53,7 @@ public partial class MainWindow : Window
             if (_controller.IsRunning)
                 _controller.Stop();
             else
-                _controller.ReStart();
+                _controller.Start();
         }
         else if (e.Key == System.Windows.Input.Key.Escape)
         {
@@ -70,6 +72,15 @@ public partial class MainWindow : Window
             if (!_controller.IsRunning)
                 _settings.ShowDialog();
         }
+    }
+
+    private void Container_SizeChanged(object sender, SizeChangedEventArgs? e)
+    {
+        var canvasCenterY = canvas.ActualHeight / 2;
+        lineTopThreshold.Y1 = canvasCenterY - _settings.FarThreshold;
+        lineTopThreshold.Y2 = canvasCenterY - _settings.FarThreshold;
+        lineBottomThreshold.Y1 = canvasCenterY + _settings.FarThreshold;
+        lineBottomThreshold.Y2 = canvasCenterY + _settings.FarThreshold;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)

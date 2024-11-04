@@ -28,6 +28,16 @@ class OrientationToVisibilityConverter : IValueConverter
     }
 }
 
+[ValueConversion(typeof(bool), typeof(Visibility))]
+class BoolToInversedVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (bool)value ? Visibility.Hidden : Visibility.Visible;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (Visibility)value != Visibility.Visible;
+}
+
 [ValueConversion(typeof(double), typeof(double))]
 class HalfValueConverter : IValueConverter
 {

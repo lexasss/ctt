@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:CTT"
         mc:Ignorable="d"
         Title="Settings"
-        Height="318"
+        Height="380"
         Width="250"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -21,6 +21,9 @@
         <local:ListOfDoublesToStringConverter  x:Key="dbl2string"/>
         <local:PathUIConverter x:Key="pathUI"/>
 
+        <Style TargetType="Separator">
+            <Setter Property="Margin" Value="4"/>
+        </Style>
         <Style x:Key="CloseButton" TargetType="Button">
             <Setter Property="MinWidth" Value="60"/>
             <Setter Property="Margin" Value="4"/>
@@ -64,27 +67,27 @@
         <StackPanel Grid.Row="0"
                     Margin="4">
             <Grid>
+                <Label>Field size, px</Label>
+                <TextBox x:Name="txbFieldSize">
+                    <TextBox.Text>
+                        <Binding Path="FieldSize" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <local:RangeRule Min="200" Max="1000" ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+            <Grid>
                 <Label>Background color</Label>
                 <xctk:ColorPicker SelectedColor="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource brush2color}}"/>
                 <!--Button x:Name="btnBackgroundColor" Style="{StaticResource Color}" Click="Color_Click">
                     <Rectangle Fill="{Binding BackgroundColor, Mode=TwoWay, Converter={StaticResource scb2brush}}"/>
                 </Button-->
             </Grid>
-            <Grid>
-                <Label>Line color</Label>
-                <xctk:ColorPicker SelectedColor="{Binding LineColor, Mode=TwoWay, Converter={StaticResource brush2color}}"/>
-                <!--Button x:Name="btnLineColor" Style="{StaticResource Color}" Click="Color_Click">
-                    <Rectangle Fill="{Binding LineColor, Mode=TwoWay, Converter={StaticResource scb2brush}}"/>
-                </Button-->
-            </Grid>
-            <Grid>
-                <Label>Far line color</Label>
-                <xctk:ColorPicker SelectedColor="{Binding FarLineColor, Mode=TwoWay, Converter={StaticResource brush2color}}"/>
-                <!--Button x:Name="btnFarLineColor" Style="{StaticResource Color}" Click="Color_Click">
-                    <Rectangle Fill="{Binding FarLineColor, Mode=TwoWay, Converter={StaticResource scb2brush}}"/>
-                </Button-->
-            </Grid>
-
+            
+            <Separator/>
+            
             <Grid>
                 <Label>Line width, px</Label>
                 <TextBox x:Name="txbLineWidth">
@@ -98,7 +101,29 @@
                 </TextBox>
             </Grid>
             <Grid>
-                <Label>Far line width, px</Label>
+                <Label>Line color</Label>
+                <xctk:ColorPicker SelectedColor="{Binding LineColor, Mode=TwoWay, Converter={StaticResource brush2color}}"/>
+                <!--Button x:Name="btnLineColor" Style="{StaticResource Color}" Click="Color_Click">
+                    <Rectangle Fill="{Binding LineColor, Mode=TwoWay, Converter={StaticResource scb2brush}}"/>
+                </Button-->
+            </Grid>
+
+            <Separator/>
+            
+            <Grid>
+                <Label>Safe zone threshold, px</Label>
+                <TextBox x:Name="txbFarThreshold">
+                    <TextBox.Text>
+                        <Binding Path="FarThreshold" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <local:RangeRule Min="20" Max="1000" ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+            <Grid>
+                <Label>Line out-of-safe-zone width, px</Label>
                 <TextBox x:Name="txbFarLineWidth">
                     <TextBox.Text>
                         <Binding Path="FarLineWidth" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
@@ -110,18 +135,15 @@
                 </TextBox>
             </Grid>
             <Grid>
-                <Label>Far threshold, px</Label>
-                <TextBox x:Name="txbFarThreshold">
-                    <TextBox.Text>
-                        <Binding Path="FarThreshold" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
-                            <Binding.ValidationRules>
-                                <local:RangeRule Min="20" Max="1000" ValidatesOnTargetUpdated="True"/>
-                            </Binding.ValidationRules>
-                        </Binding>
-                    </TextBox.Text>
-                </TextBox>
+                <Label>Line out-of-safe-zone color</Label>
+                <xctk:ColorPicker SelectedColor="{Binding FarLineColor, Mode=TwoWay, Converter={StaticResource brush2color}}"/>
+                <!--Button x:Name="btnFarLineColor" Style="{StaticResource Color}" Click="Color_Click">
+                    <Rectangle Fill="{Binding FarLineColor, Mode=TwoWay, Converter={StaticResource scb2brush}}"/>
+                </Button-->
             </Grid>
 
+            <Separator/>
+            
             <Grid>
                 <Label>Lambdas</Label>
                 <TextBox x:Name="txbLambdas"

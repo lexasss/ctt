@@ -11,12 +11,15 @@
         Width="800"
         Icon="/assets/images/icon.png"
         PreviewKeyDown="Window_PreviewKeyDown"
-        Closed="Window_Closed" Loaded="Window_Loaded">
+        SizeToContent="WidthAndHeight"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
     
     <Window.Resources>
         <local:OrientationToVisibilityConverter x:Key="ort2vis"/>
         <local:HalfValueConverter x:Key="halfVal"/>
         <local:NumberToStringConverter x:Key="num2str"/>
+        <local:BoolToInversedVisibilityConverter x:Key="bool2notVis"/>
 
         <system:String x:Key="vertical">vertical</system:String>
         <system:String x:Key="horizontal">horizontal</system:String>
@@ -24,10 +27,11 @@
     </Window.Resources>
     
     <Grid>
-        <Border BorderBrush="Gray"
+        <Border x:Name="brdContainer" BorderBrush="Gray"
                 BorderThickness="1"
                 Width="500"
-                Height="500">
+                Height="500"
+                SizeChanged="Container_SizeChanged">
             <Canvas x:Name="canvas">
                 <Line x:Name="lineCenter"
                       Height="{Binding ActualHeight, ElementName=canvas, Mode=OneWay}"
@@ -79,13 +83,17 @@
                       X2="40"/>
 
         <WrapPanel VerticalAlignment="Top"
-                    HorizontalAlignment="Center">
-            <Label Content="Lambda: "/>
-            <Label Content="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"/>
+                   HorizontalAlignment="Center">
+            <TextBlock Margin="4">
+                <Run>Lambda: </Run>
+                <Run Text="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"
+                     FontWeight="Bold"/>
+            </TextBlock>
         </WrapPanel>
 
         <StackPanel VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    Visibility="{Binding IsRunning, Converter={StaticResource bool2notVis}}">
             <Label Content="Press 1-9 to set the lambda, F2 to edit settings, ENTER to start/stop, ESC to exit"/>
         </StackPanel>
     </Grid>

@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace CTT;
 
-class Settings : INotifyPropertyChanged
+public class Settings : INotifyPropertyChanged
 {
     public static Settings Instance => _instance ??= new();
 
@@ -14,6 +14,7 @@ class Settings : INotifyPropertyChanged
     public double LineWidth { get; set; }
     public double FarLineWidth { get; set; }
     public double FarThreshold { get; set; }
+    public double FieldSize { get; set; }
     public double[] Lambdas { get; set; }
 
     public string LogFolder
@@ -53,6 +54,7 @@ class Settings : INotifyPropertyChanged
         settings.LineWidth = LineWidth;
         settings.FarLineWidth = FarLineWidth;
         settings.FarThreshold = FarThreshold;
+        settings.FieldSize = FieldSize;
 
         settings.Lambdas = JsonSerializer.Serialize(Lambdas);
 
@@ -91,6 +93,7 @@ class Settings : INotifyPropertyChanged
         LineWidth = settings.LineWidth;
         FarLineWidth = settings.FarLineWidth;
         FarThreshold = settings.FarThreshold;
+        FieldSize = settings.FieldSize;
 
         try
         {

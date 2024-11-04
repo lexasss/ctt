@@ -26,5 +26,8 @@
     <Setting Name="BackgroundColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">White</Value>
     </Setting>
+    <Setting Name="FieldSize" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

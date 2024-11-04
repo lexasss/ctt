@@ -56,7 +56,7 @@ class Joystick : Input
                 foreach (var state in datas)
                 {
                     if (state.Offset == JoystickOffset.X)
-                        _x = (double)(state.Value - 0x8000)/0x8000;
+                        _x = (double)(state.Value - 0x8000) / 0x8000;
                     else if (state.Offset == JoystickOffset.Y)
                         _y = (double)(state.Value - 0x8000) / 0x8000;
                 }

@@ -118,5 +118,17 @@ namespace CTT.Properties {
                 this["BackgroundColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public double FieldSize {
+            get {
+                return ((double)(this["FieldSize"]));
+            }
+            set {
+                this["FieldSize"] = value;
+            }
+        }
     }
 }

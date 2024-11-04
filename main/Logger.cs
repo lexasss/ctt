@@ -29,6 +29,9 @@ internal class Logger
 
     public string? Save()
     {
+        if (_records.Count == 0)
+            return null;
+
         if (string.IsNullOrEmpty(_settings.LogFolder))
         {
             var folderName = SelectLogFolder(_settings.LogFolder);
