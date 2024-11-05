@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using SharpDX.DirectInput;
+﻿using SharpDX.DirectInput;
 
 namespace CTT.Inputs;
 
@@ -21,50 +20,34 @@ class Joystick : Input
         _joystick = new SharpDX.DirectInput.Joystick(_directInput, selectedDevice.InstanceGuid);
         _joystick.Properties.BufferSize = 128;
         _joystick.Acquire();
-
-        Task.Run(Run, _cts.Token);
-
-        Application.Current.Exit += (s, e) => _cts.Cancel();
     }
 
     public static DeviceInstance[] ListDevices()
     {
-        List<DeviceInstance> joystickDevices = [];
-
-        foreach (var deviceInstance in _directInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
-            joystickDevices.Add(deviceInstance);
-
-        _devices = joystickDevices.ToArray();
+        _devices = ListDevices(InputType.Joystick);
         return _devices;
     }
 
 
     // Internal
 
-    static readonly DirectInput _directInput = new();
     static DeviceInstance[]? _devices;
 
     readonly SharpDX.DirectInput.Joystick _joystick;
-    readonly CancellationTokenSource _cts = new();
 
-    private void Run()
+    protected override void Step()
     {
-        while (!_cts.IsCancellationRequested)
+        _joystick.Poll();
+        var datas = _joystick.GetBufferedData();
+        if (datas.Length > 0)
         {
-            _joystick.Poll();
-            var datas = _joystick.GetBufferedData();
-            if (datas.Length > 0)
+            foreach (var data in datas)
             {
-                foreach (var data in datas)
-                {
-                    if (data.Offset == JoystickOffset.X)
-                        _x = (double)(data.Value - 0x8000) / 0x8000;
-                    else if (data.Offset == JoystickOffset.Y)
-                        _y = (double)(data.Value - 0x8000) / 0x8000;
-                }
+                if (data.Offset == JoystickOffset.X)
+                    _x = (double)(data.Value - 0x8000) / 0x8000;
+                else if (data.Offset == JoystickOffset.Y)
+                    _y = (double)(data.Value - 0x8000) / 0x8000;
             }
-
-            Thread.Sleep(10);
         }
     }
 }

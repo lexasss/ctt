@@ -27,13 +27,16 @@
       <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="FieldSize" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">500</Value>
+      <Value Profile="(Default)">700</Value>
     </Setting>
     <Setting Name="Input" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Orientation" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="KeyboardGain" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.15</Value>
     </Setting>
   </Settings>
 </SettingsFile>

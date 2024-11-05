@@ -121,7 +121,7 @@ namespace CTT.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
         public double FieldSize {
             get {
                 return ((double)(this["FieldSize"]));
@@ -152,6 +152,18 @@ namespace CTT.Properties {
             }
             set {
                 this["Orientation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.15")]
+        public double KeyboardGain {
+            get {
+                return ((double)(this["KeyboardGain"]));
+            }
+            set {
+                this["KeyboardGain"] = value;
             }
         }
     }

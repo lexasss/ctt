@@ -75,11 +75,11 @@ class Controller : INotifyPropertyChanged
             return;
 
         _noisePhase += K_NOISE_PHASE_STEP;
-        _noise = (Math.Cos(_noisePhase) * 2 - 1) * K_NOISE_GAIN +
-                 (Math.Cos(_noisePhase * 2) * 2 - 1) * K_NOISE_GAIN / 2;
+        var noise = (Math.Cos(_noisePhase) * 2 - 1) +
+                 (Math.Cos(_noisePhase * 2) * 2 - 1) / 2;
 
         var inputValue = _orientation == Orientation.Horizontal ? input.X : input.Y;
-        var speed = (_offset * K_OFFSET_GAIN + inputValue * K_INPUT_GAIN + _noise) * _lambda * K_SPEED / _ref;
+        var speed = (_offset * K_OFFSET_GAIN + inputValue * K_INPUT_GAIN + noise * K_NOISE_GAIN) * _lambda / _ref;
         _offset = (_offset + speed).ToRange(-1, 1);
 
         var offsetPixels = _offset * _ref;
@@ -104,11 +104,10 @@ class Controller : INotifyPropertyChanged
 
     // Internal
 
-    const double K_NOISE_GAIN = 0.6;
-    const double K_NOISE_PHASE_STEP = 0.008;
-    const double K_OFFSET_GAIN = 25;
-    const double K_INPUT_GAIN = 50;
-    const double K_SPEED = 0.2;
+    const double K_NOISE_PHASE_STEP = 0.08;
+    const double K_NOISE_GAIN = 0.02;
+    const double K_OFFSET_GAIN = 8;
+    const double K_INPUT_GAIN = 10;
 
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
@@ -121,7 +120,6 @@ class Controller : INotifyPropertyChanged
     bool _isRunning = false;
 
     double _noisePhase;
-    double _noise = 0;
 
     double _ref = 0;
 
@@ -132,7 +130,6 @@ class Controller : INotifyPropertyChanged
     private void Reset()
     {
         _noisePhase = _random.NextDouble();
-        _noise = 0;
 
         _ref = _settings.FieldSize / 2;
         _offset = 0;

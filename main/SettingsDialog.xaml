@@ -10,7 +10,7 @@
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="Settings"
-        Height="460"
+        Height="500"
         Width="270"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -22,6 +22,7 @@
         <local:BrushToColorConverter x:Key="brush2color"/>
         <local:ListOfDoublesToStringConverter  x:Key="dbl2string"/>
         <local:PathUIConverter x:Key="pathUI"/>
+        <local:InputTypeToBoolConverter x:Key="input2bool"/>
 
         <ObjectDataProvider x:Key="inputTypes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
@@ -91,10 +92,24 @@
                     Margin="4">
             <Grid>
                 <Label>Input</Label>
-                <ComboBox Width="80"
+                <ComboBox x:Name="cmbInput"
+                          Width="80"
                           HorizontalAlignment="Right"
                           ItemsSource="{Binding Source={StaticResource inputTypes}}"
                           SelectedItem="{Binding Path=Input}"/>
+            </Grid>
+            <Grid>
+                <Label>Keyboard gain</Label>
+                <TextBox x:Name="txbKeyboardGain"
+                         IsEnabled="{Binding SelectedItem, ElementName=cmbInput, Mode=OneWay, Converter={StaticResource input2bool}, ConverterParameter=Keyboard}">
+                    <TextBox.Text>
+                        <Binding Path="KeyboardGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <local:RangeRule Min="0.01" Max="1" ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
             </Grid>
 
             <Separator/>
@@ -239,6 +254,7 @@
                                         <Condition Binding="{Binding ElementName=txbFarLineWidth, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbFarThreshold, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbLambdas, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbKeyboardGain, Path=(Validation.HasError)}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>

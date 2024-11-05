@@ -19,6 +19,7 @@ class Settings : INotifyPropertyChanged
     public double[] Lambdas { get; set; }
     public Inputs.InputType Input { get; set; }
     public Orientation Orientation { get; set; }
+    public double KeyboardGain { get; set; }
 
     public string LogFolder
     {
@@ -63,9 +64,17 @@ class Settings : INotifyPropertyChanged
         settings.Input = (int)Input;
         settings.Orientation = (int)Orientation;
 
+        settings.KeyboardGain = KeyboardGain;
+
         settings.LogFolder = LogFolder;
 
         settings.Save();
+    }
+
+    public void InverseOrientation()
+    {
+        Orientation = Orientation == Orientation.Horizontal ? Orientation.Vertical : Orientation.Horizontal;
+        Updated?.Invoke(this, EventArgs.Empty);
     }
         
 
@@ -111,6 +120,8 @@ class Settings : INotifyPropertyChanged
 
         Input = (Inputs.InputType)settings.Input;
         Orientation = (Orientation)settings.Orientation;
+
+        KeyboardGain = settings.KeyboardGain;
 
         _logFolder = settings.LogFolder;
     }

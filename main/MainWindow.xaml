@@ -17,7 +17,7 @@
     
     <Window.Resources>
         <local:OrientationToVisibilityConverter x:Key="ort2vis"/>
-        <local:HalfValueConverter x:Key="halfVal"/>
+        <local:ValueMultipliedConverter x:Key="valMult"/>
         <local:NumberToStringConverter x:Key="num2str"/>
         <local:BoolToInversedVisibilityConverter x:Key="bool2notVis"/>
 
@@ -27,6 +27,7 @@
 
         <Style x:Key="controlledLine" TargetType="Line">
             <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
             <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
             <Setter Property="Stroke" Value="{Binding LineColor, Mode=OneWay}"/>
@@ -34,7 +35,7 @@
         </Style>
 
         <Style x:Key="centerLine" TargetType="Line">
-            <Setter Property="Stroke" Value="Black"/>
+            <Setter Property="Stroke" Value="Red"/>
             <Setter Property="StrokeThickness" Value="1"/>
             <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
@@ -72,8 +73,8 @@
                           Style="{StaticResource centerLine}"
                           X1="0"
                           X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"
-                          Y1="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
-                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"/>
+                          Y1="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.5}"
+                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.5}"/>
                     <Line x:Name="lineHorzTopThreshold"
                           Style="{StaticResource horzThresholdLine}"
                           Height="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
@@ -82,16 +83,16 @@
                           Height="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
                     <Line x:Name="lineHorizontal"
                           Style="{StaticResource controlledLine}"
-                          X1="0"
-                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"
+                          X1="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.25}"
+                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.75}"
                           Y1="{Binding LinePositionY, Mode=OneWay}"
                           Y2="{Binding LinePositionY, Mode=OneWay}"/>
                 </Grid>
                 <Grid Visibility="{Binding Orientation, Mode=OneWay, Converter={StaticResource ort2vis}, ConverterParameter={StaticResource horizontal}}">
                     <Line x:Name="lineVertCenter"
                           Style="{StaticResource centerLine}"
-                          X1="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
-                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource halfVal}}"
+                          X1="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.5}"
+                          X2="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.5}"
                           Y1="0"
                           Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
                     <Line x:Name="lineVertLeftThreshold"
@@ -104,8 +105,8 @@
                           Style="{StaticResource controlledLine}"
                           X1="{Binding LinePositionX, Mode=OneWay}"
                           X2="{Binding LinePositionX, Mode=OneWay}"
-                          Y1="0"
-                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
+                          Y1="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.25}"
+                          Y2="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay, Converter={StaticResource valMult}, ConverterParameter=0.75}"/>
                 </Grid>
             </Grid>
         </Border>
@@ -122,7 +123,7 @@
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
                     Visibility="{Binding IsRunning, Converter={StaticResource bool2notVis}}">
-            <Label Content="Press 1-9 to set the lambda, F2 to edit settings, ENTER to start/stop, ESC to exit"/>
+            <Label Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
         </StackPanel>
     </Grid>
 </Window>

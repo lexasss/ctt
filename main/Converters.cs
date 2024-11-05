@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using CTT.Inputs;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,10 +23,18 @@ class OrientationToVisibilityConverter : IValueConverter
         }
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotImplementedException();
-    }
+}
+
+[ValueConversion(typeof(InputType), typeof(bool))]
+class InputTypeToBoolConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        value?.ToString() == (string)parameter;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
 }
 
 [ValueConversion(typeof(bool), typeof(Visibility))]
@@ -39,17 +48,13 @@ class BoolToInversedVisibilityConverter : IValueConverter
 }
 
 [ValueConversion(typeof(double), typeof(double))]
-class HalfValueConverter : IValueConverter
+class ValueMultipliedConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return (double)value / 2;
-    }
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (double)value * double.Parse((string)parameter);
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotImplementedException();
-    }
 }
 
 [ValueConversion(typeof(double), typeof(string))]

@@ -28,19 +28,15 @@ public partial class MainWindow : Window
     {
         DeviceInstance[] inputDevices;
 
-        if (_settings.Input == Inputs.InputType.Mouse)
-            inputDevices = Inputs.Mouse.ListDevices();
-        else if (_settings.Input == Inputs.InputType.Joystick)
-            inputDevices = Inputs.Joystick.ListDevices();
-        else
-            throw new NotSupportedException("Input type is not supported.");
-
+        inputDevices = Inputs.Input.ListDevices(_settings.Input);
         if (inputDevices.Length > 0)
         {
             if (_settings.Input == Inputs.InputType.Mouse)
-                _input = new Inputs.Mouse(0);
+                _input = new Inputs.Mouse();
             else if (_settings.Input == Inputs.InputType.Joystick)
                 _input = new Inputs.Joystick(0);
+            else if (_settings.Input == Inputs.InputType.Keyboard)
+                _input = new Inputs.Keyboard();
         }
         else
         {
@@ -107,6 +103,11 @@ public partial class MainWindow : Window
         {
             if (!_controller.IsRunning)
                 _settings.ShowDialog();
+        }
+        else if (e.Key == System.Windows.Input.Key.T)
+        {
+            if (!_controller.IsRunning)
+                _settings.InverseOrientation();
         }
     }
 
