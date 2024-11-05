@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_").ToUpper())</RootNamespace>
+    <RootNamespace>$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Authors>Oleg Spakov</Authors>
     <Company>Tampere University</Company>

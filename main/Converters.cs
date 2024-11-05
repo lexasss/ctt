@@ -66,10 +66,8 @@ class NumberToStringConverter : IValueConverter
         return ((double)value).ToString($"F{digitsAfterDecimal}");
     }
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotImplementedException();
-    }
 }
 
 /*
@@ -84,9 +82,11 @@ public class ColorBrushConverter : IValueConverter
 [ValueConversion(typeof(SolidColorBrush), typeof(Color))]
 public class BrushToColorConverter : IValueConverter
 {
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => ((SolidColorBrush)value).Color;
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => 
+        ((SolidColorBrush)value).Color;
 
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new SolidColorBrush((Color)value);
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => 
+        new SolidColorBrush((Color)value);
 }
 
 [ValueConversion(typeof(string), typeof(string))]

@@ -9,9 +9,9 @@
         xmlns:local="clr-namespace:CTT"
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
-        Title="Settings"
-        Height="500"
-        Width="270"
+        Title="CTT settings"
+        Height="512"
+        Width="300"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
         SizeToContent="Height"
@@ -64,21 +64,23 @@
         <Style TargetType="TextBox">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Height" Value="26"/>
-            <Setter Property="Width" Value="56"/>
             <Setter Property="Margin" Value="2"/>
+            <Setter Property="Padding" Value="4,2"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Width" Value="86"/>
         </Style>
         <Style TargetType="xctk:ColorPicker">
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Height" Value="26"/>
-            <Setter Property="Width" Value="56"/>
+            <Setter Property="Width" Value="86"/>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Height" Value="26"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="2"/>
+            <Setter Property="Width" Value="86"/>
         </Style>
     </Window.Resources>
 
@@ -93,7 +95,6 @@
             <Grid>
                 <Label>Input</Label>
                 <ComboBox x:Name="cmbInput"
-                          Width="80"
                           HorizontalAlignment="Right"
                           ItemsSource="{Binding Source={StaticResource inputTypes}}"
                           SelectedItem="{Binding Path=Input}"/>
@@ -116,8 +117,7 @@
 
             <Grid>
                 <Label>Orientation</Label>
-                <ComboBox Width="80"
-                          HorizontalAlignment="Right"
+                <ComboBox HorizontalAlignment="Right"
                           ItemsSource="{Binding Source={StaticResource orientType}}"
                           SelectedItem="{Binding Path=Orientation}"/>
             </Grid>
@@ -202,7 +202,7 @@
             <Grid>
                 <Label>Lambdas</Label>
                 <TextBox x:Name="txbLambdas"
-                         Width="150">
+                         Width="200">
                     <TextBox.Text>
                         <Binding Path="Lambdas" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" Converter="{StaticResource dbl2string}">
                             <Binding.ValidationRules>
