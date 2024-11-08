@@ -1,7 +1,5 @@
 ﻿using SharpDX.DirectInput;
-using System.Diagnostics;
 using System.Windows;
-using System.Windows.Documents;
 
 namespace CTT.Inputs;
 
@@ -50,9 +48,37 @@ abstract class Input : IDisposable
         };
 
         foreach (var deviceInstance in _directInput.GetDevices(inputType, DeviceEnumerationFlags.AllDevices))
+        {
             devices.Add(deviceInstance);
+            System.Diagnostics.Debug.WriteLine($"Found {inputType}: {deviceInstance.InstanceName}");
+        }
 
         return devices.ToArray();
+    }
+
+    public static bool Has(InputType type)
+    {
+        DeviceType inputType = type switch
+        {
+            InputType.Mouse => DeviceType.Mouse,
+            InputType.Joystick => DeviceType.Joystick,
+            InputType.Keyboard => DeviceType.Keyboard,
+            _ => throw new NotSupportedException($"Type '{type}' is not supported")
+        };
+
+        return _directInput.GetDevices(inputType, DeviceEnumerationFlags.AllDevices).Count > 0;
+    }
+
+    public static InputType GetFirstExistingType()
+    {
+        if (Has(InputType.Mouse))
+            return InputType.Mouse;
+        else if (Has(InputType.Keyboard))
+            return InputType.Keyboard;
+        else if (Has(InputType.Joystick))
+            return InputType.Joystick;
+
+        throw new InvalidProgramException();
     }
 
     // Internal

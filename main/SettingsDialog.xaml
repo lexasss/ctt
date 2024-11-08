@@ -97,7 +97,17 @@
                 <ComboBox x:Name="cmbInput"
                           HorizontalAlignment="Right"
                           ItemsSource="{Binding Source={StaticResource inputTypes}}"
-                          SelectedItem="{Binding Path=Input}"/>
+                          SelectedItem="{Binding Path=Input}">
+                    <ComboBox.Resources>
+                        <local:InputTypePresenceToBoolConverter x:Key="itp2bool"/>
+                    </ComboBox.Resources>
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="IsEnabled" 
+                                    Value="{Binding Path=Content, RelativeSource={RelativeSource Self}, Converter={StaticResource itp2bool}}"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
             </Grid>
             <Grid>
                 <Label>Keyboard gain</Label>

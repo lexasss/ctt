@@ -1,5 +1,4 @@
-﻿using CTT.Inputs;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -27,7 +26,7 @@ class OrientationToVisibilityConverter : IValueConverter
         throw new NotImplementedException();
 }
 
-[ValueConversion(typeof(InputType), typeof(bool))]
+[ValueConversion(typeof(Inputs.InputType), typeof(bool))]
 class InputTypeToBoolConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
@@ -111,4 +110,20 @@ public class ListOfDoublesToStringConverter : IValueConverter
             .Select(item => double.TryParse(item, out double number) ? number : 0)
             .Where(number => number > 0)
             .ToArray();
+}
+
+
+[ValueConversion(typeof(Inputs.InputType), typeof(bool))]
+public class InputTypePresenceToBoolConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value == null)
+            return false;
+
+        return Inputs.Input.Has((Inputs.InputType)value);
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
 }

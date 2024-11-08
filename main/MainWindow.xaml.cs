@@ -1,4 +1,5 @@
-﻿using SharpDX.DirectInput;
+﻿using CTT.Inputs;
+using SharpDX.DirectInput;
 using System.Windows;
 
 namespace CTT;
@@ -12,8 +13,6 @@ public partial class MainWindow : Window
         _controller = new Controller();
         DataContext = _controller;
 
-        CreateInput();
-
         _settings.Updated += Settings_Updated;
     }
 
@@ -24,7 +23,7 @@ public partial class MainWindow : Window
 
     Inputs.Input? _input;
 
-    private void CreateInput()
+    private bool CreateInput()
     {
         DeviceInstance[] inputDevices;
 
@@ -40,7 +39,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            MessageBox.Show($"No device if type '{_settings.Input}' found. Please connect and restart the application, or choose another input.",
+            MessageBox.Show($"Found no device of type '{_settings.Input}'. Please connect, or choose another input.",
                     App.Name, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
@@ -48,6 +47,8 @@ public partial class MainWindow : Window
         {
             _input.Updated += Input_Updated;
         }
+
+        return _input != null;
     }
 
     private void Input_Updated(object? sender, Point e)
@@ -70,7 +71,15 @@ public partial class MainWindow : Window
         if (_input?.Type != _settings.Input)
         {
             _input?.Dispose();
-            CreateInput();
+            _input = null;
+
+            if (!CreateInput())
+            {
+                _settings.Input = Input.GetFirstExistingType();
+                _settings.Save();
+
+                Task.Run(() => Dispatcher.Invoke(_settings.ShowDialog));
+            }
         }
     }
 
