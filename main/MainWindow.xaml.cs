@@ -1,4 +1,5 @@
 ﻿using CTT.Inputs;
+using Microsoft.Windows.Shell;
 using SharpDX.DirectInput;
 using System.Windows;
 
@@ -60,8 +61,10 @@ public partial class MainWindow : Window
     {
         Background = _settings.BackgroundColor;
 
-        MinWidth = _settings.FieldSize + 16;        // SystemParameters does not allow to match window size and the task field size
-        MinHeight = _settings.FieldSize + 40;
+        MinWidth = _settings.FieldSize + 17;        // SystemParameters does not allow to match window size and the task field size
+        MinHeight = _settings.FieldSize + SystemParameters.CaptionHeight + 18;
+
+        Title = $"{App.Name} - {_settings.Input}";
 
         brdContainer.Width = _settings.FieldSize;
         brdContainer.Height = _settings.FieldSize;

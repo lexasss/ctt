@@ -110,7 +110,8 @@
                 </ComboBox>
             </Grid>
             <Grid>
-                <Label>Keyboard gain</Label>
+                <Label IsEnabled="{Binding SelectedItem, ElementName=cmbInput, Mode=OneWay, Converter={StaticResource input2bool}, ConverterParameter=Keyboard}"
+                       Content="Keyboard gain"/>
                 <TextBox x:Name="txbKeyboardGain"
                          IsEnabled="{Binding SelectedItem, ElementName=cmbInput, Mode=OneWay, Converter={StaticResource input2bool}, ConverterParameter=Keyboard}">
                     <TextBox.Text>

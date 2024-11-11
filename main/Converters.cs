@@ -101,7 +101,7 @@ public class PathUIConverter : IValueConverter
 public class ListOfDoublesToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
-        string.Join(" ", (double[])value);
+        string.Join(" ", (double[])value) + " ";
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         ((string)value)
