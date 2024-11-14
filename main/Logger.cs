@@ -9,7 +9,6 @@ internal class Logger
 
     public void Reset()
     {
-        _startTime = DateTime.Now.Ticks;
         lock (_records)
         {
             _records.Clear();
@@ -18,8 +17,7 @@ internal class Logger
 
     public void Add(params object[] items)
     {
-        var timestamp = (DateTime.Now.Ticks - _startTime) / 10000;
-        var record = string.Join('\t', [timestamp, ..items]);
+        var record = string.Join('\t', [DateTime.Now.Ticks, ..items]);
 
         lock (_records)
         {
@@ -93,6 +91,4 @@ internal class Logger
 
     readonly List<string> _records = [];
     readonly Settings _settings = Settings.Instance;
-
-    long _startTime = DateTime.Now.Ticks;
 }
