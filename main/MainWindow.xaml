@@ -113,7 +113,8 @@
 
         <WrapPanel VerticalAlignment="Top"
                    HorizontalAlignment="Center">
-            <TextBlock Margin="4">
+            <TextBlock Padding="8,4"
+                       Background="#7FFFFFFF">
                 <Run>Lambda: </Run>
                 <Run Text="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"
                      FontWeight="Bold"/>
@@ -123,7 +124,9 @@
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Center"
                     Visibility="{Binding IsRunning, Converter={StaticResource bool2notVis}}">
-            <Label Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
+            <Label Padding="8,4"
+                   Background="#7FFFFFFF"
+                   Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
         </StackPanel>
     </Grid>
 </Window>
