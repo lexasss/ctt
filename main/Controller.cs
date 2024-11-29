@@ -31,6 +31,8 @@ class Controller : INotifyPropertyChanged
     public double LinePositionY { get; private set; } = 0;
     public Brush LineColor { get; private set; }
     public double LineWidth { get; private set; }
+    public double ProperTrackingDuration { get; private set; } = 0;
+    public bool IsLongProperTracking { get; private set; } = false;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -97,7 +99,32 @@ class Controller : INotifyPropertyChanged
 
         var isFar = Math.Abs(offsetPixels) > _settings.FarThreshold;
         if ((isFar && !_isFar) || (!isFar && _isFar))
+        {
             UpdateDistanceCategory(isFar);
+        }
+
+        if (Math.Abs(_offset) >= 0.99)
+        {
+            _properTrackingStartTime = DateTime.Now.Ticks;
+            _lastProperTrackingDuration = 0;
+        }
+        else
+        {
+            _lastProperTrackingDuration = (DateTime.Now.Ticks - _properTrackingStartTime) / 10_000_000;
+        }
+
+        if (_lastProperTrackingDuration != ProperTrackingDuration)
+        {
+            ProperTrackingDuration = _lastProperTrackingDuration;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProperTrackingDuration)));
+
+            bool isLongProperTracking = ProperTrackingDuration >= PROPER_TRACKING_DURATION_THRESHOLD;
+            if ((isLongProperTracking && !IsLongProperTracking) || (!isLongProperTracking && IsLongProperTracking))
+            {
+                IsLongProperTracking = isLongProperTracking;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsLongProperTracking)));
+            }
+        }
 
         _logger.Add(_lambda, _offset.ToString("F4"), inputValue.ToString("F4"));
     }
@@ -108,6 +135,8 @@ class Controller : INotifyPropertyChanged
     const double K_NOISE_GAIN = 0.02;
     const double K_OFFSET_GAIN = 8;
     const double K_INPUT_GAIN = 10;
+
+    const double PROPER_TRACKING_DURATION_THRESHOLD = 60; // seconds
 
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
@@ -124,6 +153,8 @@ class Controller : INotifyPropertyChanged
     double _ref = 0;
 
     double _offset = 0;
+    long _properTrackingStartTime = 0;
+    double _lastProperTrackingDuration = 0;
 
     bool _isFar = false;
 
@@ -133,6 +164,10 @@ class Controller : INotifyPropertyChanged
 
         _ref = _settings.FieldSize / 2;
         _offset = 0;
+
+        _properTrackingStartTime = DateTime.Now.Ticks;
+        _lastProperTrackingDuration = 0;
+        ProperTrackingDuration = 0;
 
         LinePositionX = _ref;
         LinePositionY = _ref;

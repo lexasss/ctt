@@ -37,6 +37,16 @@ class InputTypeToBoolConverter : IValueConverter
 }
 
 [ValueConversion(typeof(bool), typeof(Visibility))]
+class BoolToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (bool)value ? Visibility.Visible : Visibility.Hidden;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        (Visibility)value == Visibility.Visible;
+}
+
+[ValueConversion(typeof(bool), typeof(Visibility))]
 class BoolToInversedVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
@@ -123,6 +133,21 @@ public class InputTypePresenceToBoolConverter : IValueConverter
 
         return Inputs.Input.Has((Inputs.InputType)value);
     }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
+        throw new NotImplementedException();
+}
+
+[ValueConversion(typeof(bool), typeof(SolidColorBrush))]
+class BoolToSolidColorBrush : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        string colorStr = (string)parameter;
+        var colorProp = typeof(Brushes).GetProperty(colorStr);
+        return (bool)value ? colorProp?.GetValue(null, null) ?? Brushes.Transparent : Brushes.Transparent;
+    }
+
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         throw new NotImplementedException();

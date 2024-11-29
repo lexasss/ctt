@@ -20,6 +20,8 @@
         <local:ValueMultipliedConverter x:Key="valMult"/>
         <local:NumberToStringConverter x:Key="num2str"/>
         <local:BoolToInversedVisibilityConverter x:Key="bool2notVis"/>
+        <local:BoolToVisibilityConverter x:Key="bool2vis"/>
+        <local:BoolToSolidColorBrush x:Key="bool2brush"/>
 
         <system:String x:Key="vertical">vertical</system:String>
         <system:String x:Key="horizontal">horizontal</system:String>
@@ -111,22 +113,38 @@
             </Grid>
         </Border>
 
-        <WrapPanel VerticalAlignment="Top"
-                   HorizontalAlignment="Center">
-            <TextBlock Padding="8,4"
-                       Background="#7FFFFFFF">
-                <Run>Lambda: </Run>
-                <Run Text="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"
-                     FontWeight="Bold"/>
-            </TextBlock>
-        </WrapPanel>
-
-        <StackPanel VerticalAlignment="Bottom"
-                    HorizontalAlignment="Center"
-                    Visibility="{Binding IsRunning, Converter={StaticResource bool2notVis}}">
-            <Label Padding="8,4"
+        <TextBlock Margin="1"
+                   Padding="8,4"
                    Background="#7FFFFFFF"
-                   Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
-        </StackPanel>
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Center">
+            <Run>Lambda: </Run>
+            <Run Text="{Binding Lambda, Mode=OneWay, Converter={StaticResource num2str}, ConverterParameter={StaticResource twoDigits}}"
+                 FontWeight="Bold"/>
+        </TextBlock>
+
+        <Label Margin="1"
+               Padding="8,4"
+               Background="#7FFFFFFF"
+               VerticalAlignment="Bottom"
+               HorizontalAlignment="Center"
+               Visibility="{Binding IsRunning, Converter={StaticResource bool2notVis}}"
+               Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
+
+        <Grid Margin="1"
+              Visibility="{Binding IsRunning, Converter={StaticResource bool2vis}}"
+              VerticalAlignment="Bottom"
+              HorizontalAlignment="Center">
+            <Ellipse Fill="{Binding IsLongProperTracking, Converter={StaticResource bool2brush}, ConverterParameter=LimeGreen}"
+                     Margin="3"
+                     Width="30"
+                     Height="30"/>
+            <Label Padding="8,4"
+                   Width="40"
+                   VerticalContentAlignment="Center"
+                   HorizontalContentAlignment="Center"
+                   Background="#7FFFFFFF"
+                   Content="{Binding ProperTrackingDuration}"/>
+        </Grid>
     </Grid>
 </Window>
