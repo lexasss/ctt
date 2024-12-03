@@ -7,6 +7,9 @@ internal class Logger
 {
     public static Logger Instance => _instance ??= new();
 
+    /// <summary>
+    /// Clears the log data
+    /// </summary>
     public void Reset()
     {
         lock (_records)
@@ -15,6 +18,10 @@ internal class Logger
         }
     }
 
+    /// <summary>
+    /// Add a record to the log data
+    /// </summary>
+    /// <param name="items">any data to save into a single record</param>
     public void Add(params object[] items)
     {
         var record = string.Join('\t', [DateTime.Now.Ticks, ..items]);
@@ -25,6 +32,10 @@ internal class Logger
         }
     }
 
+    /// <summary>
+    /// Saves records to a log file and clears the log data
+    /// </summary>
+    /// <returns>filename if saved successfully, otherwise null</returns>
     public string? Save()
     {
         if (_records.Count == 0)

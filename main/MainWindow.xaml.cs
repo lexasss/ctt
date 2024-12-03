@@ -14,10 +14,18 @@ public partial class MainWindow : Window
         _controller = new Controller();
         DataContext = _controller;
 
-        _controller.ConnectionStatusChanged += (s, e) => imgTcpClient.Source = e ? _tcpOnImage : _tcpOffImage;
-        _controller.IsRunningChanged += (s, e) =>
+        _controller.ConnectionStatusChanged += (s, isConnected) => imgTcpClient.Source = isConnected ? _tcpOnImage : _tcpOffImage;
+        _controller.IsRunningChanged += (s, isRunning) =>
         {
-            imgTcpClient.Visibility = e ? Visibility.Hidden : Visibility.Visible;
+            imgTcpClient.Visibility = isRunning ? Visibility.Hidden : Visibility.Visible;
+            if (isRunning)
+            {
+                Activate();
+            }
+            else
+            {
+                Logger.Instance.Save();
+            }
         };
 
         _settings.Updated += Settings_Updated;
