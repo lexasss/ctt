@@ -123,6 +123,13 @@
                  FontWeight="Bold"/>
         </TextBlock>
 
+        <Image x:Name="imgTcpClient"
+               Source="/assets/images/tcp-off.png" 
+               Width="32"
+               Margin="8"
+               VerticalAlignment="Bottom"
+               HorizontalAlignment="Left"/>
+
         <Label Margin="1"
                Padding="8,4"
                Background="#7FFFFFFF"

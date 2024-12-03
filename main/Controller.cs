@@ -35,6 +35,9 @@ class Controller : INotifyPropertyChanged
     public bool IsLongProperTracking { get; private set; } = false;
 
     public event PropertyChangedEventHandler? PropertyChanged;
+    public event EventHandler<bool>? IsRunningChanged;
+    public event EventHandler<bool>? ConnectionStatusChanged;
+
 
     public Controller()
     {
@@ -44,6 +47,25 @@ class Controller : INotifyPropertyChanged
         _noisePhase = _random.NextDouble();
 
         _lambda = _settings.Lambdas[_lambdaIndex];
+
+        _server.ClientConnected += (s, e) => ConnectionStatusChanged?.Invoke(this, true);
+        _server.ClientDisconnected += (s, e) => ConnectionStatusChanged?.Invoke(this, false);
+        _server.Data += (s, e) =>
+        {
+            if (e == "start")
+            {
+                if (!IsRunning)
+                    Start();
+            }
+            else if (e == "stop")
+            {
+                if (IsRunning)
+                    Stop();
+            }
+        };
+
+        _server.Start();
+
 
         LineColor = _settings.LineColor;
         LineWidth = _settings.LineWidth;
@@ -57,6 +79,8 @@ class Controller : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
         Reset();
+
+        IsRunningChanged?.Invoke(this, true);
     }
 
     public void Stop()
@@ -65,6 +89,8 @@ class Controller : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
         Reset();
+
+        IsRunningChanged?.Invoke(this, false);
     }
 
     /// <summary>
@@ -141,6 +167,8 @@ class Controller : INotifyPropertyChanged
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
     readonly Logger _logger = Logger.Instance;
+
+    readonly TcpServer _server = new();
 
     Orientation _orientation;
     int _lambdaIndex = 0;

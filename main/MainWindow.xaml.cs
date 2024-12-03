@@ -1,7 +1,7 @@
-﻿using CTT.Inputs;
-using Microsoft.Windows.Shell;
-using SharpDX.DirectInput;
+﻿using SharpDX.DirectInput;
 using System.Windows;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace CTT;
 
@@ -14,10 +14,19 @@ public partial class MainWindow : Window
         _controller = new Controller();
         DataContext = _controller;
 
+        _controller.ConnectionStatusChanged += (s, e) => imgTcpClient.Source = e ? _tcpOnImage : _tcpOffImage;
+        _controller.IsRunningChanged += (s, e) =>
+        {
+            imgTcpClient.Visibility = e ? Visibility.Hidden : Visibility.Visible;
+        };
+
         _settings.Updated += Settings_Updated;
     }
 
     // Internal
+
+    readonly ImageSource _tcpOnImage = new BitmapImage(new Uri("pack://application:,,,/Assets/images/tcp-on.png"));
+    readonly ImageSource _tcpOffImage = new BitmapImage(new Uri("pack://application:,,,/Assets/images/tcp-off.png"));
 
     readonly Settings _settings = Settings.Instance;
     readonly Controller _controller;
@@ -78,7 +87,7 @@ public partial class MainWindow : Window
 
             if (!CreateInput())
             {
-                _settings.Input = Input.GetFirstExistingType();
+                _settings.Input = Inputs.Input.GetFirstExistingType();
                 _settings.Save();
 
                 Task.Run(() => Dispatcher.Invoke(_settings.ShowDialog));
