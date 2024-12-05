@@ -18,6 +18,8 @@ public partial class MainWindow : Window
         _controller.IsRunningChanged += Controller_IsRunningChanged;
 
         _settings.Updated += Settings_Updated;
+
+        Controller_ConnectionStatusChanged(null, false);
     }
 
     // Internal
@@ -59,8 +61,12 @@ public partial class MainWindow : Window
     }
 
     private void Controller_ConnectionStatusChanged(object? sender, bool isConnected) => Dispatcher.Invoke(() =>
-        imgTcpClient.Source = isConnected ? _tcpOnImage : _tcpOffImage
-    );
+    {
+        if (_controller.IsServerReady)
+        {
+            imgTcpClient.Source = isConnected ? _tcpOnImage : _tcpOffImage;
+        }
+    });
 
     private void Controller_IsRunningChanged(object? sender, bool isRunning) => Dispatcher.Invoke(() =>
     {

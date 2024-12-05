@@ -26,6 +26,7 @@ class Controller : INotifyPropertyChanged
     public double Lambda => _lambda;
 
     public bool IsRunning => _isRunning;
+    public bool IsServerReady => _server.IsListening;
 
     public double LinePositionX { get; private set; } = 0;
     public double LinePositionY { get; private set; } = 0;
@@ -65,7 +66,6 @@ class Controller : INotifyPropertyChanged
         };
 
         _server.Start();
-
 
         LineColor = _settings.LineColor;
         LineWidth = _settings.LineWidth;
