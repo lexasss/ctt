@@ -14,19 +14,8 @@ public partial class MainWindow : Window
         _controller = new Controller();
         DataContext = _controller;
 
-        _controller.ConnectionStatusChanged += (s, isConnected) => imgTcpClient.Source = isConnected ? _tcpOnImage : _tcpOffImage;
-        _controller.IsRunningChanged += (s, isRunning) =>
-        {
-            imgTcpClient.Visibility = isRunning ? Visibility.Hidden : Visibility.Visible;
-            if (isRunning)
-            {
-                Activate();
-            }
-            else
-            {
-                Logger.Instance.Save();
-            }
-        };
+        _controller.ConnectionStatusChanged += Controller_ConnectionStatusChanged;
+        _controller.IsRunningChanged += Controller_IsRunningChanged;
 
         _settings.Updated += Settings_Updated;
     }
@@ -69,6 +58,23 @@ public partial class MainWindow : Window
         return _input != null;
     }
 
+    private void Controller_ConnectionStatusChanged(object? sender, bool isConnected) => Dispatcher.Invoke(() =>
+        imgTcpClient.Source = isConnected ? _tcpOnImage : _tcpOffImage
+    );
+
+    private void Controller_IsRunningChanged(object? sender, bool isRunning) => Dispatcher.Invoke(() =>
+    {
+        imgTcpClient.Visibility = isRunning ? Visibility.Hidden : Visibility.Visible;
+        if (isRunning)
+        {
+            Activate();
+        }
+        else
+        {
+            Logger.Instance.Save();
+        }
+    });
+
     private void Input_Updated(object? sender, Point e)
     {
         _controller.Update(e);
@@ -102,6 +108,8 @@ public partial class MainWindow : Window
             }
         }
     }
+
+    // UI
 
     private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
     {
