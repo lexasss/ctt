@@ -153,5 +153,13 @@
                    Background="#7FFFFFFF"
                    Content="{Binding ProperTrackingDuration}"/>
         </Grid>
+
+        <Label Visibility="{Binding IsRunning, Converter={StaticResource bool2vis}}"
+               VerticalAlignment="Bottom"
+               HorizontalAlignment="Right"
+               Padding="8,4"
+               VerticalContentAlignment="Center"
+               Background="#7FFFFFFF"
+               Content="{Binding TrackingDuration}"/>
     </Grid>
 </Window>

@@ -10,7 +10,7 @@
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="CTT settings"
-        Height="512"
+        Height="552"
         Width="300"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -223,6 +223,58 @@
                     </TextBox.Text>
                 </TextBox>
             </Grid>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">Gains</Label>
+                <Grid Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <Label Grid.Row="0" Grid.Column="0" Content="Offset"/>
+                    <TextBox x:Name="txbOffsetGain" Grid.Row="1" Grid.Column="0" >
+                        <TextBox.Text>
+                            <Binding Path="OffsetGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="1" Max="50" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <Label Grid.Row="0" Grid.Column="1" Content="Input"/>
+                    <TextBox x:Name="txbInputGain" Grid.Row="1" Grid.Column="1" >
+                        <TextBox.Text>
+                            <Binding Path="InputGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="1" Max="50" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+
+                    <Label Grid.Row="0" Grid.Column="2" Content="Noise"/>
+                    <TextBox x:Name="txbNoiseGain" Grid.Row="1" Grid.Column="2" >
+                        <TextBox.Text>
+                            <Binding Path="NoiseGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="0.001" Max="1" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
+            </Grid>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -266,6 +318,9 @@
                                         <Condition Binding="{Binding ElementName=txbFarThreshold, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbLambdas, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbKeyboardGain, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbOffsetGain, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbInputGain, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbNoiseGain, Path=(Validation.HasError)}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>

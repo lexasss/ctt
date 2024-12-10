@@ -20,6 +20,9 @@ class Settings : INotifyPropertyChanged
     public Inputs.InputType Input { get; set; }
     public Orientation Orientation { get; set; }
     public double KeyboardGain { get; set; }
+    public double OffsetGain { get; set; }
+    public double InputGain { get; set; }
+    public double NoiseGain { get; set; }
 
     public string LogFolder
     {
@@ -65,6 +68,9 @@ class Settings : INotifyPropertyChanged
         settings.Orientation = (int)Orientation;
 
         settings.KeyboardGain = KeyboardGain;
+        settings.OffsetGain = OffsetGain;
+        settings.InputGain = InputGain;
+        settings.NoiseGain = NoiseGain;
 
         settings.LogFolder = LogFolder;
 
@@ -122,6 +128,9 @@ class Settings : INotifyPropertyChanged
         Orientation = (Orientation)settings.Orientation;
 
         KeyboardGain = settings.KeyboardGain;
+        OffsetGain = settings.OffsetGain;
+        InputGain = settings.InputGain;
+        NoiseGain = settings.NoiseGain;
 
         _logFolder = settings.LogFolder;
     }

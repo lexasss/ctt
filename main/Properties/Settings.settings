@@ -41,5 +41,14 @@
     <Setting Name="CallUpgrade" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="OffsetGain" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="InputGain" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="NoiseGain" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.02</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
