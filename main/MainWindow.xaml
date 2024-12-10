@@ -139,7 +139,7 @@
                Content="Press 1-9 to set the lambda, F2 to edit settings, T to inverse orientaion, ENTER to start/stop, ESC to exit"/>
 
         <Grid Margin="1"
-              Visibility="{Binding IsRunning, Converter={StaticResource bool2vis}}"
+              Visibility="{Binding IsProperTrackingTimerVisible, Converter={StaticResource bool2vis}}"
               VerticalAlignment="Bottom"
               HorizontalAlignment="Center">
             <Ellipse Fill="{Binding IsLongProperTracking, Converter={StaticResource bool2brush}, ConverterParameter=LimeGreen}"
@@ -154,11 +154,12 @@
                    Content="{Binding ProperTrackingDuration}"/>
         </Grid>
 
-        <Label Visibility="{Binding IsRunning, Converter={StaticResource bool2vis}}"
+        <Label Visibility="{Binding IsTrackingTimerVisible, Converter={StaticResource bool2vis}}"
                VerticalAlignment="Bottom"
-               HorizontalAlignment="Right"
+               HorizontalAlignment="Center"
                Padding="8,4"
                VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center"
                Background="#7FFFFFFF"
                Content="{Binding TrackingDuration}"/>
     </Grid>

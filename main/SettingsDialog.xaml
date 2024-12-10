@@ -10,7 +10,7 @@
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="CTT settings"
-        Height="552"
+        Height="596"
         Width="300"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -39,6 +39,9 @@
         </ObjectDataProvider>
 
         <Style TargetType="Separator">
+            <Setter Property="Margin" Value="4"/>
+        </Style>
+        <Style TargetType="CheckBox">
             <Setter Property="Margin" Value="4"/>
         </Style>
         <Style x:Key="CloseButton" TargetType="Button">
@@ -229,7 +232,9 @@
                     <ColumnDefinition Width="80"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0">Gains</Label>
+                <Label Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Content="Gains"/>
                 <Grid Grid.Column="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -241,8 +246,12 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     
-                    <Label Grid.Row="0" Grid.Column="0" Content="Offset"/>
-                    <TextBox x:Name="txbOffsetGain" Grid.Row="1" Grid.Column="0" >
+                    <Label Grid.Row="0" Grid.Column="0"
+                           Content="Offset"
+                           HorizontalAlignment="Center"/>
+                    <TextBox x:Name="txbOffsetGain" Grid.Row="1" Grid.Column="0"
+                             Width="42"
+                             HorizontalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="OffsetGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -252,8 +261,12 @@
                         </TextBox.Text>
                     </TextBox>
 
-                    <Label Grid.Row="0" Grid.Column="1" Content="Input"/>
-                    <TextBox x:Name="txbInputGain" Grid.Row="1" Grid.Column="1" >
+                    <Label Grid.Row="0" Grid.Column="1"
+                           Content="Input"
+                           HorizontalAlignment="Center"/>
+                    <TextBox x:Name="txbInputGain" Grid.Row="1" Grid.Column="1"
+                             Width="42"
+                             HorizontalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="InputGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -263,8 +276,12 @@
                         </TextBox.Text>
                     </TextBox>
 
-                    <Label Grid.Row="0" Grid.Column="2" Content="Noise"/>
-                    <TextBox x:Name="txbNoiseGain" Grid.Row="1" Grid.Column="2" >
+                    <Label Grid.Row="0" Grid.Column="2"
+                           Content="Noise"
+                           HorizontalAlignment="Center"/>
+                    <TextBox x:Name="txbNoiseGain" Grid.Row="1" Grid.Column="2"
+                             Width="42"
+                             HorizontalAlignment="Center">
                         <TextBox.Text>
                             <Binding Path="NoiseGain" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -275,6 +292,13 @@
                     </TextBox>
                 </Grid>
             </Grid>
+
+            <Separator/>
+
+            <CheckBox Content="Show proper tracking timer"
+                      IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"/>
+            <CheckBox Content="Show total tracking timer"
+                      IsChecked="{Binding IsTrackingTimerVisible, Mode=TwoWay}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">

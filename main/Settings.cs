@@ -24,6 +24,9 @@ class Settings : INotifyPropertyChanged
     public double InputGain { get; set; }
     public double NoiseGain { get; set; }
 
+    public bool IsProperTrackingTimerVisible { get; set; } = false;
+    public bool IsTrackingTimerVisible { get; set; } = false;
+
     public string LogFolder
     {
         get => _logFolder;
@@ -40,10 +43,17 @@ class Settings : INotifyPropertyChanged
     public void ShowDialog()
     {
         var modifiedSettings = new Settings();
+
+        modifiedSettings.IsProperTrackingTimerVisible = IsProperTrackingTimerVisible;
+        modifiedSettings.IsTrackingTimerVisible = IsTrackingTimerVisible;
+
         var dialog = new SettingsDialog(modifiedSettings);
         if (dialog.ShowDialog() ?? false)
         {
             modifiedSettings.Save();
+            
+            IsProperTrackingTimerVisible = modifiedSettings.IsProperTrackingTimerVisible;
+            IsTrackingTimerVisible = modifiedSettings.IsTrackingTimerVisible;
 
             Load();
             Updated?.Invoke(this, EventArgs.Empty);

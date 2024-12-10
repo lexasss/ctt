@@ -35,6 +35,8 @@ class Controller : INotifyPropertyChanged
     public string TrackingDuration { get; private set; } = "";
     public double ProperTrackingDuration { get; private set; } = 0;
     public bool IsLongProperTracking { get; private set; } = false;
+    public bool IsTrackingTimerVisible => _isRunning && _settings.IsTrackingTimerVisible;
+    public bool IsProperTrackingTimerVisible => _isRunning && _settings.IsProperTrackingTimerVisible;
 
     public event PropertyChangedEventHandler? PropertyChanged;
     public event EventHandler<bool>? IsRunningChanged;
@@ -78,6 +80,8 @@ class Controller : INotifyPropertyChanged
     {
         _isRunning = true;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsTrackingTimerVisible)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProperTrackingTimerVisible)));
 
         _logger.AddInfo("time", "lambda", "position", "input");
 
@@ -90,6 +94,8 @@ class Controller : INotifyPropertyChanged
     {
         _isRunning = false;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsTrackingTimerVisible)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProperTrackingTimerVisible)));
 
         Reset();
 
