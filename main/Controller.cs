@@ -78,6 +78,8 @@ class Controller : INotifyPropertyChanged
         _isRunning = true;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
 
+        _logger.AddInfo("time", "lambda", "position", "input");
+
         Reset();
 
         IsRunningChanged?.Invoke(this, true);

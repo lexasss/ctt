@@ -19,12 +19,26 @@ internal class Logger
     }
 
     /// <summary>
-    /// Add a record to the log data
+    /// Add a time-stamped record to the log data
     /// </summary>
     /// <param name="items">any data to save into a single record</param>
     public void Add(params object[] items)
     {
         var record = string.Join('\t', [DateTime.Now.Ticks, ..items]);
+
+        lock (_records)
+        {
+            _records.Add(record);
+        }
+    }
+
+    /// <summary>
+    /// Add a record to the log data
+    /// </summary>
+    /// <param name="items">any data to save into a single record</param>
+    public void AddInfo(params object[] items)
+    {
+        var record = string.Join('\t', items);
 
         lock (_records)
         {
