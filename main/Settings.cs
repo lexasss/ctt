@@ -27,6 +27,8 @@ class Settings : INotifyPropertyChanged
     public bool IsProperTrackingTimerVisible { get; set; } = false;
     public bool IsTrackingTimerVisible { get; set; } = false;
 
+    public bool IsOldCTTBugEnabled { get; set; } = false;
+
     public string LogFolder
     {
         get => _logFolder;
@@ -81,6 +83,8 @@ class Settings : INotifyPropertyChanged
         settings.OffsetGain = OffsetGain;
         settings.InputGain = InputGain;
         settings.NoiseGain = NoiseGain;
+
+        settings.IsOldCTTBugEnabled = IsOldCTTBugEnabled;
 
         settings.LogFolder = LogFolder;
 
@@ -141,6 +145,8 @@ class Settings : INotifyPropertyChanged
         OffsetGain = settings.OffsetGain;
         InputGain = settings.InputGain;
         NoiseGain = settings.NoiseGain;
+
+        IsOldCTTBugEnabled = settings.IsOldCTTBugEnabled;
 
         _logFolder = settings.LogFolder;
     }

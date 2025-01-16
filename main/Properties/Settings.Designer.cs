@@ -214,5 +214,17 @@ namespace CTT.Properties {
                 this["NoiseGain"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsOldCTTBugEnabled {
+            get {
+                return ((bool)(this["IsOldCTTBugEnabled"]));
+            }
+            set {
+                this["IsOldCTTBugEnabled"] = value;
+            }
+        }
     }
 }

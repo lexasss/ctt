@@ -12,6 +12,7 @@
         Icon="/assets/images/icon.png"
         PreviewKeyDown="Window_PreviewKeyDown"
         SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen"
         Closed="Window_Closed"
         Loaded="Window_Loaded">
     
@@ -38,7 +39,7 @@
 
         <Style x:Key="centerLine" TargetType="Line">
             <Setter Property="Stroke" Value="Red"/>
-            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="StrokeThickness" Value="2"/>
             <Setter Property="Height" Value="{Binding ActualHeight, ElementName=brdContainer, Mode=OneWay}"/>
             <Setter Property="Width" Value="{Binding ActualWidth, ElementName=brdContainer, Mode=OneWay}"/>
         </Style>

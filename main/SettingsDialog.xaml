@@ -10,7 +10,7 @@
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="CTT settings"
-        Height="596"
+        Height="620"
         Width="300"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -299,6 +299,8 @@
                       IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"/>
             <CheckBox Content="Show total tracking timer"
                       IsChecked="{Binding IsTrackingTimerVisible, Mode=TwoWay}"/>
+            <CheckBox Content="Enabled old CTT software bugs"
+                      IsChecked="{Binding IsOldCTTBugEnabled, Mode=TwoWay}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">

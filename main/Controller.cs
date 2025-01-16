@@ -132,7 +132,8 @@ class Controller : INotifyPropertyChanged
             //System.Diagnostics.Debug.WriteLine($"Y={input.Y:F3} >> {_offset:F3} >> {LinePositionY:F3}");
         }
 
-        var isFar = Math.Abs(offsetPixels) > _settings.FarThreshold;
+        var threshold = _settings.FarThreshold * (_settings.IsOldCTTBugEnabled ? 0.23 : 1);  // "* 0.23" is a re-implementation of a bug from old CTT
+        var isFar = Math.Abs(offsetPixels) > threshold;
         if ((isFar && !_isFar) || (!isFar && _isFar))
         {
             UpdateDistanceCategory(isFar);
