@@ -117,8 +117,8 @@ public class ListOfDoublesToStringConverter : IValueConverter
         ((string)value)
             .Split(" ")
             .Where(item => !string.IsNullOrEmpty(item))
-            .Select(item => double.TryParse(item, out double number) ? number : 0)
-            .Where(number => number > 0)
+            .Select(item => (double)(double.TryParse(item, out double number) ? number : -1))
+            .Where(number => number >= 0)
             .ToArray();
 }
 

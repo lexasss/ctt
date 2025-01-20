@@ -218,7 +218,7 @@
                 <TextBox x:Name="txbLambdas"
                          Width="200">
                     <TextBox.Text>
-                        <Binding Path="Lambdas" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay" Converter="{StaticResource dbl2string}">
+                        <Binding Path="Lambdas" UpdateSourceTrigger="LostFocus" Mode="TwoWay" Converter="{StaticResource dbl2string}">
                             <Binding.ValidationRules>
                                 <local:NonBlankRule ValidatesOnTargetUpdated="True"/>
                             </Binding.ValidationRules>

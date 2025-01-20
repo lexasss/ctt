@@ -17,12 +17,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="assets\images\tcp-no.png" />
-    <None Remove="assets\images\tcp-off.png" />
-    <None Remove="assets\images\tcp-on.png" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.1" />
     <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
