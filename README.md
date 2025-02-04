@@ -4,17 +4,18 @@ The application implements Critical Tracking Task (CTT) according to [ISO/TS 141
 
 ## Installation
 
-The application is distributed in a portable setup and does not require installation. Simply extract the downloaded archive and launch `ctt.exe`.
+The application is distributed in a portable setup and does not require installation. Simply extract the downloaded [archive](https://github.com/lexasss/ctt/releases) and launch `ctt.exe`.
 
-On the first run, the application may complain about MS .NET Runtime 8.0 missing in the system. Install the [binaries](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.10-windows-x64-installer) before trying again.
+On the first run, the application may complain about MS .NET Runtime 8.0 missing in the system. Install the [.NET binaries](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.10-windows-x64-installer) before trying again.
 
 ## Usage
 
-A list of shortcuts is shown on the screen. The these shortcuts to select the lambda or restart the task.
+A list of shortcuts is shown on the screen. Use these shortcuts to select the difficulty level (lambda) or start/stop the control task.
 
-A log file in a form "ctt-{timestamp}.txt" is created in a user home folder (adjustable) after the application is closed.
-Log files constain four values on each line: time, lambda, line offset, and user input.
+Each control task session creates a log file of a form `ctt-{timestamp}.txt` in a user home folder (adjustable).
+Log files contain four values on each line: `time`, `lambda`, `line offset`, and `user input`.
 
 ## Supported devices:
 
 - Joysticks
+- Mice
