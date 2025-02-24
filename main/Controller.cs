@@ -87,6 +87,8 @@ class Controller : INotifyPropertyChanged
 
         Reset();
 
+        _tonePlayer.Start();
+
         IsRunningChanged?.Invoke(this, true);
     }
 
@@ -96,6 +98,8 @@ class Controller : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsRunning)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsTrackingTimerVisible)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProperTrackingTimerVisible)));
+
+        _tonePlayer.Stop();
 
         Reset();
 
@@ -118,6 +122,8 @@ class Controller : INotifyPropertyChanged
         var inputValue = _orientation == Orientation.Horizontal ? input.X : input.Y;
         var speed = (_offset * _settings.OffsetGain + inputValue * _settings.InputGain + noise * _settings.NoiseGain) * _lambda / _ref;
         _offset = (_offset + speed).ToRange(-1, 1);
+
+        _tonePlayer.SetPitchFactor(_offset);
 
         var offsetPixels = _offset * _ref;
         if (_orientation == Orientation.Horizontal)
@@ -177,7 +183,7 @@ class Controller : INotifyPropertyChanged
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
     readonly Logger _logger = Logger.Instance;
-
+    readonly TonePlayer _tonePlayer = new();
     readonly TcpServer _server = new();
 
     Orientation _orientation;

@@ -10,7 +10,7 @@
         xmlns:inputs="clr-namespace:CTT.Inputs"
         mc:Ignorable="d"
         Title="CTT settings"
-        Height="620"
+        Height="700"
         Width="300"
         Icon="/assets/images/icon.png"
         ResizeMode="NoResize"
@@ -301,6 +301,27 @@
                       IsChecked="{Binding IsTrackingTimerVisible, Mode=TwoWay}"/>
             <CheckBox Content="Enabled old CTT software bugs"
                       IsChecked="{Binding IsOldCTTBugEnabled, Mode=TwoWay}"/>
+
+
+            <Separator/>
+
+            <CheckBox Name="chkTonePlayerIsEnabled" Content="Play sine tone"
+                      IsChecked="{Binding TonePlayer_IsEnabled, Mode=TwoWay}"/>
+
+            <Grid>
+                <Label>Tone max pitch, Hz</Label>
+                <TextBox x:Name="txbTonePlayerMaxPitch"
+                         IsEnabled="{Binding IsChecked, ElementName=chkTonePlayerIsEnabled}">
+                    <TextBox.Text>
+                        <Binding Path="TonePlayer_MaxFrequency" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                            <Binding.ValidationRules>
+                                <local:RangeRule Min="500" Max="10000" ValidatesOnTargetUpdated="True"/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </Grid>
+
         </StackPanel>
 
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -347,6 +368,7 @@
                                         <Condition Binding="{Binding ElementName=txbOffsetGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbInputGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbNoiseGain, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbTonePlayerMaxPitch, Path=(Validation.HasError)}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>
