@@ -17,9 +17,11 @@ class Joystick : Input
 
         var selectedDevice = _devices[deviceIndex];
 
-        _joystick = new SharpDX.DirectInput.Joystick(_directInput, selectedDevice.InstanceGuid);
-        _joystick.Properties.BufferSize = 128;
-        _joystick.Acquire();
+        var joystick = new SharpDX.DirectInput.Joystick(_directInput, selectedDevice.InstanceGuid);
+        joystick.Properties.BufferSize = 128;
+        joystick.Acquire();
+
+        _joystick = joystick;
     }
 
     public static DeviceInstance[] ListDevices()
@@ -37,6 +39,9 @@ class Joystick : Input
 
     protected override void Step()
     {
+        if (_joystick == null)
+            return;
+
         _joystick.Poll();
         var datas = _joystick.GetBufferedData();
         if (datas.Length > 0)

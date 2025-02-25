@@ -29,17 +29,10 @@ class Settings : INotifyPropertyChanged
 
     public bool IsOldCTTBugEnabled { get; set; } = false;
 
-    public bool TonePlayer_IsEnabled
-    {
-        get => TonePlayer.IsEnabled;
-        set => TonePlayer.IsEnabled = value;
-    }
-
-    public double TonePlayer_MaxFrequency
-    {
-        get => TonePlayer.MaxPitch;
-        set => TonePlayer.MaxPitch = value;
-    }
+    public bool TonePlayer_IsEnabled { get; set; } = false;
+    public double TonePlayer_MaxFrequency { get; set; } = 1000;
+    public int TonePlayer_SoundsDeviceIndex { get; set; } = -1;
+    public ToneType TonePlayer_ToneType { get; set; } = ToneType.Sine;
 
     public string LogFolder
     {
@@ -100,6 +93,8 @@ class Settings : INotifyPropertyChanged
 
         settings.TonePlayer_IsEnabled = TonePlayer_IsEnabled;
         settings.TonePlayer_MaxFrequency = TonePlayer_MaxFrequency;
+        settings.TonePlayer_SoundsDeviceIndex = TonePlayer_SoundsDeviceIndex;
+        settings.TonePlayer_ToneType = (int)TonePlayer_ToneType;
 
         settings.LogFolder = LogFolder;
 
@@ -165,6 +160,8 @@ class Settings : INotifyPropertyChanged
 
         TonePlayer_IsEnabled = settings.TonePlayer_IsEnabled;
         TonePlayer_MaxFrequency = settings.TonePlayer_MaxFrequency;
+        TonePlayer_SoundsDeviceIndex = settings.TonePlayer_SoundsDeviceIndex;
+        TonePlayer_ToneType = (ToneType)settings.TonePlayer_ToneType;
 
         _logFolder = settings.LogFolder;
     }

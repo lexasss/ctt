@@ -250,5 +250,29 @@ namespace CTT.Properties {
                 this["TonePlayer_MaxFrequency"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int TonePlayer_SoundsDeviceIndex {
+            get {
+                return ((int)(this["TonePlayer_SoundsDeviceIndex"]));
+            }
+            set {
+                this["TonePlayer_SoundsDeviceIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TonePlayer_ToneType {
+            get {
+                return ((int)(this["TonePlayer_ToneType"]));
+            }
+            set {
+                this["TonePlayer_ToneType"] = value;
+            }
+        }
     }
 }

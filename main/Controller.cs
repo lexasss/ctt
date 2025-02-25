@@ -183,8 +183,9 @@ class Controller : INotifyPropertyChanged
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
     readonly Logger _logger = Logger.Instance;
-    readonly TonePlayer _tonePlayer = new();
     readonly TcpServer _server = new();
+
+    TonePlayer _tonePlayer = TonePlayer.Load("TonePlayer");
 
     Orientation _orientation;
     int _lambdaIndex = 0;
@@ -241,6 +242,9 @@ class Controller : INotifyPropertyChanged
 
     private void Settings_Updated(object? sender, EventArgs e)
     {
+        _tonePlayer.Dispose();
+        _tonePlayer = TonePlayer.Load(_tonePlayer.Name);
+
         if (_orientation != _settings.Orientation)
         {
             _orientation = _settings.Orientation;

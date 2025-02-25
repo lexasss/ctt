@@ -13,9 +13,11 @@ class Mouse : Input
             _devices = ListDevices();
         }
 
-        _mouse = new SharpDX.DirectInput.Mouse(_directInput);
-        _mouse.Properties.BufferSize = 128;
-        _mouse.Acquire();
+        var mouse = new SharpDX.DirectInput.Mouse(_directInput);
+        mouse.Properties.BufferSize = 128;
+        mouse.Acquire();
+
+        _mouse = mouse;
     }
 
     public static DeviceInstance[] ListDevices()
@@ -40,6 +42,9 @@ class Mouse : Input
 
     protected override void Step()
     {
+        if (_mouse == null)
+            return;
+
         _mouse.Poll();
         var datas = _mouse.GetBufferedData();
         if (datas.Length > 0)
