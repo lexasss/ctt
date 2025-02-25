@@ -1,6 +1,6 @@
 # Critical Tracking Task
 
-The application implements Critical Tracking Task (CTT) according to [ISO/TS 14198:2019](https://www.iso.org/standard/71509.html).
+The application implements Critical Tracking Task (CTT) according to [ISO/TS 14198:2019](https://www.iso.org/standard/71509.html) with some additional features.
 
 ## Installation
 
@@ -18,4 +18,5 @@ Log files contain four values on each line: `time`, `lambda`, `line offset`, and
 ## Supported devices:
 
 - Joysticks
-- Mice
+- Mice (click-and-drag mode)
+- Keyboards
