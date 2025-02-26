@@ -20,9 +20,19 @@ public class TonePlayer : IDisposable
 {
     public string Name { get; }
     public bool IsEnabled { get; set; } = false;
-    public double MaxPitch { get; set; } = 1000;
+    public double MaxFrequency { get; set; } = 1000;
     public int SoundsDeviceIndex { get; set; } = -1;
-    public ToneType ToneType { get; set; } = ToneType.Sine;
+    public ToneType ToneType
+    { 
+        get => _toneGenerator.ToneType;
+        set => _toneGenerator.ToneType = value;
+    }
+    public int TonePulseDuration
+    {
+        get => _toneGenerator.TonePulseDuration;
+        set => _toneGenerator.TonePulseDuration = value;
+    }
+
 
     public TonePlayer(string name)
     {
@@ -37,11 +47,11 @@ public class TonePlayer : IDisposable
     {
         if (IsEnabled)
         {
-            _sineGen.Frequency = 0;
-            _sineGen.ToneType = ToneType;
+            _toneGenerator.Frequency = 0;
+            _toneGenerator.Reset();
 
             _waveOut.DeviceNumber = SoundsDeviceIndex;
-            _waveOut.Init(_sineGen);
+            _waveOut.Init(_toneGenerator);
             _waveOut.Play();
         }
     }
@@ -61,36 +71,35 @@ public class TonePlayer : IDisposable
     }
 
     /// <summary>
-    /// Sets the sine frequence from 0 Hz to <see cref="MaxPitch"/> Hz.
-    /// Negative values affect the left channel, and positive values affect the right channel
+    /// Sets the sine frequence from 0 Hz to <see cref="MaxFrequency"/> Hz, or
+    /// affects the pulse interval if <see cref="TonePulseDuration"/> is >0.
+    /// Negative parameter values affect the left channel, and positive values affect the right channel
     /// </summary>
     /// <param name="factor">-1..1</param>
     public void SetPitchFactor(double factor)
     {
-        //_sineGen.Frequency = factor * MaxPitch;
-        _sineGen.Frequency = Math.Sign(factor) * Math.Exp(Math.Abs(factor) * 3.5 - 2.5) * MaxPitch / Math.E;
+        _toneGenerator.Frequency = factor * MaxFrequency;
+        //_toneGenerator.Frequency = Math.Sign(factor) * Math.Exp(Math.Abs(factor) * 3.5 - 2.5) * MaxFrequency / Math.E;
     }
-
-    /*public void Save()
-    {
-        var settings = Properties.Settings.Default;
-        settings[$"{Name}_IsEnabled"] = IsEnabled;
-        settings[$"{Name}_MaxFrequency"] = MaxPitch;
-        settings[$"{Name}_SoundsDeviceIndex"] = SoundsDeviceIndex;
-        settings[$"{name}_ToneType"] = (int)ToneType;
-        settings.Save();
-    }*/
 
     public static TonePlayer Load(string name)
     {
         var settings = Properties.Settings.Default;
-        return new TonePlayer(name)
+        try
         {
-            IsEnabled = (bool)settings[$"{name}_IsEnabled"],
-            MaxPitch = (double)settings[$"{name}_MaxFrequency"],
-            SoundsDeviceIndex = (int)settings[$"{name}_SoundsDeviceIndex"],
-            ToneType = (ToneType)(int)settings[$"{name}_ToneType"]
-        };
+            return new TonePlayer(name)
+            {
+                IsEnabled = (bool)settings[$"{name}_{nameof(IsEnabled)}"],
+                MaxFrequency = (double)settings[$"{name}_{nameof(MaxFrequency)}"],
+                SoundsDeviceIndex = (int)settings[$"{name}_{nameof(SoundsDeviceIndex)}"],
+                ToneType = (ToneType)(int)settings[$"{name}_{nameof(ToneType)}"],
+                TonePulseDuration = (int)settings[$"{name}_{nameof(TonePulseDuration)}"],
+            };
+        }
+        catch
+        {
+            return new TonePlayer(name);
+        }
     }
 
     public static SoundDevice[] GetSoundDevices()
@@ -107,36 +116,48 @@ public class TonePlayer : IDisposable
     // Internal
 
     readonly WaveOut _waveOut = new();
-    readonly SineGenerator _sineGen = new();
+    readonly ToneGenerator _toneGenerator = new();
 }
 
 internal record class Harmonic(int Index, double Gain, double Phase);
 
-internal class SineGenerator : ISampleProvider
+internal class ToneGenerator : ISampleProvider
 {
     public WaveFormat WaveFormat => _waveFormat;
 
     /// <summary>
-    /// Frequency for the Generator. (-20000.0 - 20000.0 Hz)
-    /// Negative value affect left channel, positive values affect right channel
+    /// (-20000.0 - 20000.0 Hz)
+    /// Negative values affect left channel, positive values affect right channel
     /// </summary>
     public double Frequency { get; set; } = 0.0;
 
     /// <summary>
-    /// 0.0 .. 1.0
+    /// 0..1
     /// </summary>
     public double Gain { get; set; } = 1;
 
     public ToneType ToneType { get; set; } = ToneType.Sine;
 
     /// <summary>
+    /// In miliseconds. Zero means continuos tone. Avoid long pulse durations (>200ms)
+    /// </summary>
+    public int TonePulseDuration { get; set; } = 0;
+
+    /// <summary>
     /// Initializes a new instance for the Generator
     /// </summary>
     /// <param name="sampleRate">Desired sample rate</param>
-    public SineGenerator(int sampleRate = 44100)
+    public ToneGenerator(int sampleRate = 44100)
     {
+        _stepDuration = 1000d / sampleRate;
         _waveFormat = WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, 2);
         _totalGain = Harmonics.Sum(h => h.Gain);
+    }
+
+    public void Reset()
+    {
+        _accDuration = 0;
+        _mode = TonePulseDuration == 0 ? Mode.Continuos : Mode.Off;
     }
 
     public Harmonic[] Harmonics { get; set; } = [
@@ -147,6 +168,9 @@ internal class SineGenerator : ISampleProvider
         new Harmonic(5, 0.11, Math.PI / 2),
     ];
 
+    const double PULSE_FREQUENCY = 200;
+    const double MAX_PULSE_INTERVAL = 3000;
+
     /// <summary>
     /// Reads from this provider.
     /// </summary>
@@ -155,14 +179,31 @@ internal class SineGenerator : ISampleProvider
         int outIndex = offset;
         int sampleCount = count / _waveFormat.Channels;
 
-        var freqLeft = Frequency < 0 ? -Frequency : 0;
+        var freq = _mode == Mode.Continuos ? Math.Abs(Frequency) : PULSE_FREQUENCY;
+
+        //_tonePulseInterval = Math.Min(MAX_PULSE_INTERVAL, 50 * MAX_PULSE_INTERVAL / Math.Abs(Frequency));
+        _tonePulseInterval = Math.Min(MAX_PULSE_INTERVAL, MAX_PULSE_INTERVAL / Math.Exp(0.005 * Math.Abs(Frequency)));
+
+        var freqLeft = Frequency < 0 ? freq : 0;
         double stepLeft = TWO_PI * freqLeft / _waveFormat.SampleRate;
 
-        var freqRight = Frequency > 0 ? Frequency : 0;
+        var freqRight = Frequency > 0 ? freq : 0;
         double stepRight = TWO_PI * freqRight / _waveFormat.SampleRate;
 
         for (int si = 0; si < sampleCount; si++)
         {
+            _accDuration += _stepDuration;
+            if (_mode == Mode.Off && _accDuration > _tonePulseInterval)
+            {
+                _mode = Mode.On;
+                _accDuration = 0;
+            }
+            else if (_mode == Mode.On && _accDuration > TonePulseDuration)
+            {
+                _mode = Mode.Off;
+                _accDuration = 0;
+            }
+
             for (int ci = 0; ci < _waveFormat.Channels; ci++)
             {
                 var phase = (ci == 0 ? _phaseLeft : _phaseRight) % TWO_PI;
@@ -173,11 +214,15 @@ internal class SineGenerator : ISampleProvider
                     ToneType.Harmonics => Harmonics.Sum(h => h.Gain * Math.Sin(h.Phase + h.Index * phase)) / _totalGain,
                     _ => throw new NotImplementedException("This tone type is not supported")
                 }) * Gain;
+
                 buffer[outIndex++] = (float)sampleValue;
             }
 
-            _phaseLeft += stepLeft;
-            _phaseRight += stepRight;
+            if (_mode != Mode.Off)
+            {
+                _phaseLeft += stepLeft;
+                _phaseRight += stepRight;
+            }
         }
 
         return count;
@@ -185,13 +230,20 @@ internal class SineGenerator : ISampleProvider
 
     // Internal
 
+    enum Mode { Continuos, Off, On }
+
     const double TWO_PI = 2 * Math.PI;
     const double PI_2 = Math.PI / 2;
 
+    readonly double _stepDuration;  // ms
     readonly WaveFormat _waveFormat;
 
     static double _phaseLeft = 0;
     static double _phaseRight = 0;
 
+    static double _accDuration = 0;
+
     double _totalGain;
+    double _tonePulseInterval;
+    Mode _mode = Mode.Continuos;
 }

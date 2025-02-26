@@ -274,5 +274,17 @@ namespace CTT.Properties {
                 this["TonePlayer_ToneType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TonePlayer_TonePulseDuration {
+            get {
+                return ((int)(this["TonePlayer_TonePulseDuration"]));
+            }
+            set {
+                this["TonePlayer_TonePulseDuration"] = value;
+            }
+        }
     }
 }

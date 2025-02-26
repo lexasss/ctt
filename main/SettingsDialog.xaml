@@ -339,7 +339,7 @@
                         <TextBox.Text>
                             <Binding Path="TonePlayer_MaxFrequency" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
-                                    <local:RangeRule Min="500" Max="10000" ValidatesOnTargetUpdated="True"/>
+                                    <local:RangeRule Min="100" Max="10000" ValidatesOnTargetUpdated="True"/>
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
@@ -356,6 +356,20 @@
                     <ComboBox HorizontalAlignment="Right"
                               ItemsSource="{Binding Source={StaticResource toneType}}"
                               SelectedItem="{Binding TonePlayer_ToneType}"/>
+                </Grid>
+                <Grid>
+                    <Label>Tone pulse duration, ms</Label>
+                    <TextBox x:Name="txbTonePlayerTonePulseDuration"
+                             IsEnabled="{Binding IsChecked, ElementName=chkTonePlayerIsEnabled}"
+                             ToolTip="Zero means continuous tone">
+                        <TextBox.Text>
+                            <Binding Path="TonePlayer_TonePulseDuration" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="0" Max="500" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </Grid>
 
             </StackPanel>
@@ -407,6 +421,7 @@
                                         <Condition Binding="{Binding ElementName=txbInputGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbNoiseGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbTonePlayerMaxPitch, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbTonePlayerTonePulseDuration, Path=(Validation.HasError)}" Value="False" />
                                     </MultiDataTrigger.Conditions>
                                     <Setter Property="IsEnabled" Value="True" />
                                 </MultiDataTrigger>

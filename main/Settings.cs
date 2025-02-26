@@ -33,6 +33,7 @@ class Settings : INotifyPropertyChanged
     public double TonePlayer_MaxFrequency { get; set; } = 1000;
     public int TonePlayer_SoundsDeviceIndex { get; set; } = -1;
     public ToneType TonePlayer_ToneType { get; set; } = ToneType.Sine;
+    public int TonePlayer_TonePulseDuration { get; set; } = 0;
 
     public string LogFolder
     {
@@ -95,6 +96,7 @@ class Settings : INotifyPropertyChanged
         settings.TonePlayer_MaxFrequency = TonePlayer_MaxFrequency;
         settings.TonePlayer_SoundsDeviceIndex = TonePlayer_SoundsDeviceIndex;
         settings.TonePlayer_ToneType = (int)TonePlayer_ToneType;
+        settings.TonePlayer_TonePulseDuration = TonePlayer_TonePulseDuration;
 
         settings.LogFolder = LogFolder;
 
@@ -162,6 +164,7 @@ class Settings : INotifyPropertyChanged
         TonePlayer_MaxFrequency = settings.TonePlayer_MaxFrequency;
         TonePlayer_SoundsDeviceIndex = settings.TonePlayer_SoundsDeviceIndex;
         TonePlayer_ToneType = (ToneType)settings.TonePlayer_ToneType;
+        TonePlayer_TonePulseDuration = settings.TonePlayer_TonePulseDuration;
 
         _logFolder = settings.LogFolder;
     }
