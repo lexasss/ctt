@@ -87,7 +87,8 @@ class Controller : INotifyPropertyChanged
 
         Reset();
 
-        _tonePlayer.Start();
+        _tonePlayer1.Start();
+        _tonePlayer2.Start();
 
         IsRunningChanged?.Invoke(this, true);
     }
@@ -99,7 +100,8 @@ class Controller : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsTrackingTimerVisible)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsProperTrackingTimerVisible)));
 
-        _tonePlayer.Stop();
+        _tonePlayer1.Stop();
+        _tonePlayer2.Stop();
 
         Reset();
 
@@ -123,7 +125,8 @@ class Controller : INotifyPropertyChanged
         var speed = (_offset * _settings.OffsetGain + inputValue * _settings.InputGain + noise * _settings.NoiseGain) * _lambda / _ref;
         _offset = (_offset + speed).ToRange(-1, 1);
 
-        _tonePlayer.SetPitchFactor(_offset);
+        _tonePlayer1.SetPitchFactor(_offset);
+        _tonePlayer2.SetPitchFactor(_offset);
 
         var offsetPixels = _offset * _ref;
         if (_orientation == Orientation.Horizontal)
@@ -185,7 +188,8 @@ class Controller : INotifyPropertyChanged
     readonly Logger _logger = Logger.Instance;
     readonly TcpServer _server = new();
 
-    TonePlayer _tonePlayer = TonePlayer.Load("TonePlayer");
+    TonePlayer _tonePlayer1 = TonePlayer.Load("TonePlayer1");
+    TonePlayer _tonePlayer2 = TonePlayer.Load("TonePlayer2");
 
     Orientation _orientation;
     int _lambdaIndex = 0;
@@ -242,8 +246,11 @@ class Controller : INotifyPropertyChanged
 
     private void Settings_Updated(object? sender, EventArgs e)
     {
-        _tonePlayer.Dispose();
-        _tonePlayer = TonePlayer.Load(_tonePlayer.Name);
+        _tonePlayer1.Dispose();
+        _tonePlayer1 = TonePlayer.Load(_tonePlayer1.Name);
+
+        _tonePlayer2.Dispose();
+        _tonePlayer2 = TonePlayer.Load(_tonePlayer2.Name);
 
         if (_orientation != _settings.Orientation)
         {

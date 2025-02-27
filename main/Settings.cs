@@ -29,11 +29,17 @@ class Settings : INotifyPropertyChanged
 
     public bool IsOldCTTBugEnabled { get; set; } = false;
 
-    public bool TonePlayer_IsEnabled { get; set; } = false;
-    public double TonePlayer_MaxFrequency { get; set; } = 1000;
-    public int TonePlayer_SoundsDeviceIndex { get; set; } = -1;
-    public ToneType TonePlayer_ToneType { get; set; } = ToneType.Sine;
-    public int TonePlayer_TonePulseDuration { get; set; } = 0;
+    public bool TonePlayer1_IsEnabled { get; set; } = false;
+    public double TonePlayer1_MaxFrequency { get; set; } = 1000;
+    public int TonePlayer1_SoundsDeviceIndex { get; set; } = -1;
+    public ToneType TonePlayer1_ToneType { get; set; } = ToneType.Sine;
+    public int TonePlayer1_PulseDuration { get; set; } = 0;
+
+    public bool TonePlayer2_IsEnabled { get; set; } = false;
+    public double TonePlayer2_MaxFrequency { get; set; } = 1000;
+    public int TonePlayer2_SoundsDeviceIndex { get; set; } = -1;
+    public ToneType TonePlayer2_ToneType { get; set; } = ToneType.Sine;
+    public int TonePlayer2_PulseDuration { get; set; } = 0;
 
     public string LogFolder
     {
@@ -92,11 +98,17 @@ class Settings : INotifyPropertyChanged
 
         settings.IsOldCTTBugEnabled = IsOldCTTBugEnabled;
 
-        settings.TonePlayer_IsEnabled = TonePlayer_IsEnabled;
-        settings.TonePlayer_MaxFrequency = TonePlayer_MaxFrequency;
-        settings.TonePlayer_SoundsDeviceIndex = TonePlayer_SoundsDeviceIndex;
-        settings.TonePlayer_ToneType = (int)TonePlayer_ToneType;
-        settings.TonePlayer_TonePulseDuration = TonePlayer_TonePulseDuration;
+        settings.TonePlayer1_IsEnabled = TonePlayer1_IsEnabled;
+        settings.TonePlayer1_MaxFrequency = TonePlayer1_MaxFrequency;
+        settings.TonePlayer1_SoundsDeviceIndex = TonePlayer1_SoundsDeviceIndex;
+        settings.TonePlayer1_ToneType = (int)TonePlayer1_ToneType;
+        settings.TonePlayer1_PulseDuration = TonePlayer1_PulseDuration;
+
+        settings.TonePlayer2_IsEnabled = TonePlayer2_IsEnabled;
+        settings.TonePlayer2_MaxFrequency = TonePlayer2_MaxFrequency;
+        settings.TonePlayer2_SoundsDeviceIndex = TonePlayer2_SoundsDeviceIndex;
+        settings.TonePlayer2_ToneType = (int)TonePlayer2_ToneType;
+        settings.TonePlayer2_PulseDuration = TonePlayer2_PulseDuration;
 
         settings.LogFolder = LogFolder;
 
@@ -160,11 +172,17 @@ class Settings : INotifyPropertyChanged
 
         IsOldCTTBugEnabled = settings.IsOldCTTBugEnabled;
 
-        TonePlayer_IsEnabled = settings.TonePlayer_IsEnabled;
-        TonePlayer_MaxFrequency = settings.TonePlayer_MaxFrequency;
-        TonePlayer_SoundsDeviceIndex = settings.TonePlayer_SoundsDeviceIndex;
-        TonePlayer_ToneType = (ToneType)settings.TonePlayer_ToneType;
-        TonePlayer_TonePulseDuration = settings.TonePlayer_TonePulseDuration;
+        TonePlayer1_IsEnabled = settings.TonePlayer1_IsEnabled;
+        TonePlayer1_MaxFrequency = settings.TonePlayer1_MaxFrequency;
+        TonePlayer1_SoundsDeviceIndex = settings.TonePlayer1_SoundsDeviceIndex;
+        TonePlayer1_ToneType = (ToneType)settings.TonePlayer1_ToneType;
+        TonePlayer1_PulseDuration = settings.TonePlayer1_PulseDuration;
+
+        TonePlayer2_IsEnabled = settings.TonePlayer2_IsEnabled;
+        TonePlayer2_MaxFrequency = settings.TonePlayer2_MaxFrequency;
+        TonePlayer2_SoundsDeviceIndex = settings.TonePlayer2_SoundsDeviceIndex;
+        TonePlayer2_ToneType = (ToneType)settings.TonePlayer2_ToneType;
+        TonePlayer2_PulseDuration = settings.TonePlayer2_PulseDuration;
 
         _logFolder = settings.LogFolder;
     }

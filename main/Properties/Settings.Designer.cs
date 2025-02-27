@@ -230,60 +230,120 @@ namespace CTT.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool TonePlayer_IsEnabled {
+        public bool TonePlayer1_IsEnabled {
             get {
-                return ((bool)(this["TonePlayer_IsEnabled"]));
+                return ((bool)(this["TonePlayer1_IsEnabled"]));
             }
             set {
-                this["TonePlayer_IsEnabled"] = value;
+                this["TonePlayer1_IsEnabled"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1000")]
-        public double TonePlayer_MaxFrequency {
+        public double TonePlayer1_MaxFrequency {
             get {
-                return ((double)(this["TonePlayer_MaxFrequency"]));
+                return ((double)(this["TonePlayer1_MaxFrequency"]));
             }
             set {
-                this["TonePlayer_MaxFrequency"] = value;
+                this["TonePlayer1_MaxFrequency"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("-1")]
-        public int TonePlayer_SoundsDeviceIndex {
+        public int TonePlayer1_SoundsDeviceIndex {
             get {
-                return ((int)(this["TonePlayer_SoundsDeviceIndex"]));
+                return ((int)(this["TonePlayer1_SoundsDeviceIndex"]));
             }
             set {
-                this["TonePlayer_SoundsDeviceIndex"] = value;
+                this["TonePlayer1_SoundsDeviceIndex"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int TonePlayer_ToneType {
+        public int TonePlayer1_ToneType {
             get {
-                return ((int)(this["TonePlayer_ToneType"]));
+                return ((int)(this["TonePlayer1_ToneType"]));
             }
             set {
-                this["TonePlayer_ToneType"] = value;
+                this["TonePlayer1_ToneType"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int TonePlayer_TonePulseDuration {
+        public int TonePlayer1_PulseDuration {
             get {
-                return ((int)(this["TonePlayer_TonePulseDuration"]));
+                return ((int)(this["TonePlayer1_PulseDuration"]));
             }
             set {
-                this["TonePlayer_TonePulseDuration"] = value;
+                this["TonePlayer1_PulseDuration"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool TonePlayer2_IsEnabled {
+            get {
+                return ((bool)(this["TonePlayer2_IsEnabled"]));
+            }
+            set {
+                this["TonePlayer2_IsEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public double TonePlayer2_MaxFrequency {
+            get {
+                return ((double)(this["TonePlayer2_MaxFrequency"]));
+            }
+            set {
+                this["TonePlayer2_MaxFrequency"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-1")]
+        public int TonePlayer2_SoundsDeviceIndex {
+            get {
+                return ((int)(this["TonePlayer2_SoundsDeviceIndex"]));
+            }
+            set {
+                this["TonePlayer2_SoundsDeviceIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TonePlayer2_ToneType {
+            get {
+                return ((int)(this["TonePlayer2_ToneType"]));
+            }
+            set {
+                this["TonePlayer2_ToneType"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int TonePlayer2_PulseDuration {
+            get {
+                return ((int)(this["TonePlayer2_PulseDuration"]));
+            }
+            set {
+                this["TonePlayer2_PulseDuration"] = value;
             }
         }
     }
