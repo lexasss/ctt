@@ -24,5 +24,7 @@ Log files contain four values on each line: `time`, `lambda`, `line offset`, and
 ## External control
 
 The software listens TCP port `8964` and accepts the following commands in plain text (lower-case ASCII strings terminated with `'\0'`):
-- `"start"` - starts the tracking session
-- `"stop"` - stop the tracking session
+- `"start"` - starts the session
+- `"stop"` - stops the session
+- `"lambda<N>"` - sets lambda index to N
+- `"exit"` - closes the application
