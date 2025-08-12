@@ -54,19 +54,7 @@ class Controller : INotifyPropertyChanged
 
         _server.ClientConnected += (s, e) => ConnectionStatusChanged?.Invoke(this, true);
         _server.ClientDisconnected += (s, e) => ConnectionStatusChanged?.Invoke(this, false);
-        _server.Data += (s, e) =>
-        {
-            if (e == "start")
-            {
-                if (!IsRunning)
-                    Start();
-            }
-            else if (e == "stop")
-            {
-                if (IsRunning)
-                    Stop();
-            }
-        };
+        _server.Data += Server_Data;
 
         _server.Start();
 
@@ -183,10 +171,16 @@ class Controller : INotifyPropertyChanged
 
     const double PROPER_TRACKING_DURATION_THRESHOLD = 60; // seconds
 
+    readonly string NET_COMMAND_START = "start";
+    readonly string NET_COMMAND_STOP = "stop";
+    readonly string NET_COMMAND_SET_LAMBDA = "lambda"; // followed by the index without a space/gap
+    readonly string NET_COMMAND_EXIT = "exit";
+
     readonly Random _random = new();
     readonly Settings _settings = Settings.Instance;
     readonly Logger _logger = Logger.Instance;
     readonly TcpServer _server = new();
+    readonly StringComparison _stringComparison = StringComparison.OrdinalIgnoreCase;
 
     TonePlayer _tonePlayer1 = TonePlayer.Load("TonePlayer1");
     TonePlayer _tonePlayer2 = TonePlayer.Load("TonePlayer2");
@@ -242,6 +236,36 @@ class Controller : INotifyPropertyChanged
 
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LineColor)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LineWidth)));
+    }
+
+    // Event handlers
+
+    private void Server_Data(object? sender, string e)
+    {
+        if (e.Equals(NET_COMMAND_START, _stringComparison))
+        {
+            if (!IsRunning)
+                Start();
+        }
+        else if (e.Equals(NET_COMMAND_STOP, _stringComparison))
+        {
+            if (IsRunning)
+                Stop();
+        }
+        else if (e.StartsWith(NET_COMMAND_SET_LAMBDA, _stringComparison))
+        {
+            if (!IsRunning && int.TryParse(e.Substring(6).Trim(), out int index) &&
+                index >= 0 && index < _settings.Lambdas.Length)
+            {
+                LambdaIndex = index;
+            }
+        }
+        else if (e.Equals(NET_COMMAND_EXIT, _stringComparison))
+        {
+            if (IsRunning)
+                Stop();
+            Application.Current.Shutdown();
+        }
     }
 
     private void Settings_Updated(object? sender, EventArgs e)
