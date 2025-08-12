@@ -254,7 +254,7 @@ class Controller : INotifyPropertyChanged
         }
         else if (e.StartsWith(NET_COMMAND_SET_LAMBDA, _stringComparison))
         {
-            if (!IsRunning && int.TryParse(e.Substring(6).Trim(), out int index) &&
+            if (!IsRunning && int.TryParse(e.Substring(NET_COMMAND_SET_LAMBDA.Length).Trim(), out int index) &&
                 index >= 0 && index < _settings.Lambdas.Length)
             {
                 LambdaIndex = index;
