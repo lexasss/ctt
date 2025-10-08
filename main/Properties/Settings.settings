@@ -83,5 +83,8 @@
     <Setting Name="TonePlayer2_PulseDuration" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="ProperTrackingDurationThreshold" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

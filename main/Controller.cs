@@ -139,7 +139,7 @@ class Controller : INotifyPropertyChanged
         TrackingDuration = TimeSpan.FromSeconds((DateTime.Now.Ticks - _trackingStartTime) / 10_000_000).ToString();
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingDuration)));
 
-        if (Math.Abs(_offset) >= 0.99)
+        if (Math.Abs(_offset) >= (_settings.FarThreshold / (_settings.FieldSize / 2))) // not properly tracking
         {
             _properTrackingStartTime = DateTime.Now.Ticks;
             _lastProperTrackingDuration = 0;
@@ -154,7 +154,7 @@ class Controller : INotifyPropertyChanged
             ProperTrackingDuration = _lastProperTrackingDuration;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProperTrackingDuration)));
 
-            bool isLongProperTracking = ProperTrackingDuration >= PROPER_TRACKING_DURATION_THRESHOLD;
+            bool isLongProperTracking = ProperTrackingDuration >= _settings.ProperTrackingDurationThreshold;
             if ((isLongProperTracking && !IsLongProperTracking) || (!isLongProperTracking && IsLongProperTracking))
             {
                 IsLongProperTracking = isLongProperTracking;
@@ -168,8 +168,6 @@ class Controller : INotifyPropertyChanged
     // Internal
 
     const double K_NOISE_PHASE_STEP = 0.08;
-
-    const double PROPER_TRACKING_DURATION_THRESHOLD = 60; // seconds
 
     readonly string NET_COMMAND_START = "start";
     readonly string NET_COMMAND_STOP = "stop";

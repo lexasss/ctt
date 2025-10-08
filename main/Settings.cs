@@ -25,6 +25,7 @@ class Settings : INotifyPropertyChanged
     public double NoiseGain { get; set; }
 
     public bool IsProperTrackingTimerVisible { get; set; } = false;
+    public int ProperTrackingDurationThreshold { get; set; } = 60;
     public bool IsTrackingTimerVisible { get; set; } = false;
 
     public bool IsOldCTTBugEnabled { get; set; } = false;
@@ -95,6 +96,8 @@ class Settings : INotifyPropertyChanged
         settings.OffsetGain = OffsetGain;
         settings.InputGain = InputGain;
         settings.NoiseGain = NoiseGain;
+
+        settings.ProperTrackingDurationThreshold = ProperTrackingDurationThreshold;
 
         settings.IsOldCTTBugEnabled = IsOldCTTBugEnabled;
 
@@ -169,6 +172,8 @@ class Settings : INotifyPropertyChanged
         OffsetGain = settings.OffsetGain;
         InputGain = settings.InputGain;
         NoiseGain = settings.NoiseGain;
+
+        ProperTrackingDurationThreshold = settings.ProperTrackingDurationThreshold;
 
         IsOldCTTBugEnabled = settings.IsOldCTTBugEnabled;
 

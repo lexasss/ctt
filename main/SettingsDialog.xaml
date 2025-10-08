@@ -324,8 +324,23 @@
 
                 <Separator/>
 
-                <CheckBox Content="Show proper tracking timer"
-                          IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"/>
+                <Grid>
+                    <CheckBox x:Name="chlIsProperTimerVisible" Content="Show proper tracking timer highlighted in"
+                              IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"/>
+                    <TextBox HorizontalAlignment="Right"
+                             Padding="1"
+                             Width="28"
+                             Height="20"
+                             IsEnabled="{Binding ElementName=chlIsProperTimerVisible, Path=IsChecked}">
+                        <TextBox.Text>
+                            <Binding Path="ProperTrackingDurationThreshold" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="5" Max="300" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                </Grid>
                 <CheckBox Content="Show total tracking timer"
                           IsChecked="{Binding IsTrackingTimerVisible, Mode=TwoWay}"/>
                 <CheckBox Content="Enabled old CTT software bugs"

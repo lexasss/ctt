@@ -144,12 +144,13 @@
               VerticalAlignment="Bottom"
               HorizontalAlignment="Center">
             <Ellipse Fill="{Binding IsLongProperTracking, Converter={StaticResource bool2brush}, ConverterParameter=LimeGreen}"
-                     Margin="3"
+                     Margin="20"
                      Width="30"
                      Height="30"/>
-            <Label Padding="8,4"
+            <Label Margin="0,0,0,23"
+                   Padding="8,4"
                    Width="40"
-                   VerticalContentAlignment="Center"
+                   VerticalContentAlignment="Bottom"
                    HorizontalContentAlignment="Center"
                    Background="#7FFFFFFF"
                    Content="{Binding ProperTrackingDuration}"/>
