@@ -288,6 +288,13 @@
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
+                            <TextBox.ToolTip>
+                                <TextBlock>
+                                    <Run>When calculating the line position, this factor is multiplied by the current line offset from the central position.</Run>
+                                    <LineBreak/>
+                                    <Run>Default is 8. Greater values make the line drift faster away from the center.</Run>
+                                </TextBlock>
+                            </TextBox.ToolTip>
                         </TextBox>
 
                         <Label Grid.Row="0" Grid.Column="1"
@@ -303,6 +310,13 @@
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
+                            <TextBox.ToolTip>
+                                <TextBlock>
+                                    <Run>When calculating the line position, this factor is multiplied by the current user input value.</Run>
+                                    <LineBreak/>
+                                    <Run>Default is 10. Greater values make the user input more sensitive.</Run>
+                                </TextBlock>
+                            </TextBox.ToolTip>
                         </TextBox>
 
                         <Label Grid.Row="0" Grid.Column="2"
@@ -318,6 +332,13 @@
                                     </Binding.ValidationRules>
                                 </Binding>
                             </TextBox.Text>
+                            <TextBox.ToolTip>
+                                <TextBlock>
+                                    <Run>When calculating the line position, this factor is multiplied by a random 0..1 value that emulates noise.</Run>
+                                    <LineBreak/>
+                                    <Run>Default is 0.02. Greater values make the line drift more chaotic.</Run>
+                                </TextBlock>
+                            </TextBox.ToolTip>
                         </TextBox>
                     </Grid>
                 </Grid>
@@ -325,11 +346,13 @@
                 <Separator/>
 
                 <Grid>
-                    <CheckBox x:Name="chlIsProperTimerVisible" Content="Show proper tracking timer highlighted in"
-                              IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"/>
+                    <CheckBox x:Name="chlIsProperTimerVisible" Content="Show good-tracking time highlighted in          sec"
+                              IsChecked="{Binding IsProperTrackingTimerVisible, Mode=TwoWay}"
+                              Padding="4,-1,-2,0"/>
                     <TextBox HorizontalAlignment="Right"
+                             Margin="0,0,23,0"
                              Padding="1"
-                             Width="28"
+                             Width="26"
                              Height="20"
                              IsEnabled="{Binding ElementName=chlIsProperTimerVisible, Path=IsChecked}">
                         <TextBox.Text>
@@ -341,7 +364,7 @@
                         </TextBox.Text>
                     </TextBox>
                 </Grid>
-                <CheckBox Content="Show total tracking timer"
+                <CheckBox Content="Show total tracking time"
                           IsChecked="{Binding IsTrackingTimerVisible, Mode=TwoWay}"/>
                 <CheckBox Content="Enabled old CTT software bugs"
                           IsChecked="{Binding IsOldCTTBugEnabled, Mode=TwoWay}"/>
