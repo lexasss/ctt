@@ -253,7 +253,7 @@ class Controller : INotifyPropertyChanged
         }
         else if (e.Equals(NET_COMMAND_GET_LAMBDAS, _stringComparison))
         {
-            _server.Send(string.Join(";", _settings.Lambdas));
+            _server.Send("LMB" + string.Join(";", _settings.Lambdas));
         }
         else if (e.StartsWith(NET_COMMAND_SET_LAMBDA, _stringComparison))
         {
