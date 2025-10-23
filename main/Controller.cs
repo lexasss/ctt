@@ -171,6 +171,7 @@ class Controller : INotifyPropertyChanged
 
     readonly string NET_COMMAND_START = "start";
     readonly string NET_COMMAND_STOP = "stop";
+    readonly string NET_COMMAND_GET_LAMBDAS = "lambdas";
     readonly string NET_COMMAND_SET_LAMBDA = "lambda"; // followed by the index without a space/gap
     readonly string NET_COMMAND_EXIT = "exit";
 
@@ -249,6 +250,10 @@ class Controller : INotifyPropertyChanged
         {
             if (IsRunning)
                 Stop();
+        }
+        else if (e.Equals(NET_COMMAND_GET_LAMBDAS, _stringComparison))
+        {
+            _server.Send(string.Join(";", _settings.Lambdas));
         }
         else if (e.StartsWith(NET_COMMAND_SET_LAMBDA, _stringComparison))
         {
