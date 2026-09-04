@@ -5,6 +5,12 @@ using System.Windows.Media;
 
 namespace CTT;
 
+public enum ToneMode
+{
+    Continuos,
+    Pulse
+}
+
 class Settings : INotifyPropertyChanged
 {
     public static Settings Instance => _instance ??= new();
@@ -31,16 +37,36 @@ class Settings : INotifyPropertyChanged
     public bool IsOldCTTBugEnabled { get; set; } = false;
 
     public bool TonePlayer1_IsEnabled { get; set; } = false;
+    public double TonePlayer1_FrequencyCutOff { get; set; } = 0;
     public double TonePlayer1_MaxFrequency { get; set; } = 1000;
     public int TonePlayer1_SoundsDeviceIndex { get; set; } = -1;
     public ToneType TonePlayer1_ToneType { get; set; } = ToneType.Sine;
-    public int TonePlayer1_PulseDuration { get; set; } = 0;
+    public int TonePlayer1_PulseDuration
+    {
+        get => _tonePlayer1_PulseDuration;
+        set
+        {
+            _tonePlayer1_PulseDuration = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TonePlayer1_PulseDuration)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TonePlayer1_Mode)));
+        }
+    }
 
     public bool TonePlayer2_IsEnabled { get; set; } = false;
+    public double TonePlayer2_FrequencyCutOff { get; set; } = 0;
     public double TonePlayer2_MaxFrequency { get; set; } = 1000;
     public int TonePlayer2_SoundsDeviceIndex { get; set; } = -1;
     public ToneType TonePlayer2_ToneType { get; set; } = ToneType.Sine;
-    public int TonePlayer2_PulseDuration { get; set; } = 0;
+    public int TonePlayer2_PulseDuration
+    {
+        get => _tonePlayer2_PulseDuration;
+        set
+        {
+            _tonePlayer2_PulseDuration = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TonePlayer2_PulseDuration)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TonePlayer2_Mode)));
+        }
+    }
 
     public string LogFolder
     {
@@ -51,6 +77,9 @@ class Settings : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LogFolder)));
         }
     }
+
+    public ToneMode TonePlayer1_Mode => TonePlayer1_PulseDuration == 0 ? ToneMode.Continuos : ToneMode.Pulse;
+    public ToneMode TonePlayer2_Mode => TonePlayer2_PulseDuration == 0 ? ToneMode.Continuos : ToneMode.Pulse;
 
     public event EventHandler? Updated;
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -106,12 +135,14 @@ class Settings : INotifyPropertyChanged
         settings.TonePlayer1_SoundsDeviceIndex = TonePlayer1_SoundsDeviceIndex;
         settings.TonePlayer1_ToneType = (int)TonePlayer1_ToneType;
         settings.TonePlayer1_PulseDuration = TonePlayer1_PulseDuration;
+        settings.TonePlayer1_FrequencyCutOff = TonePlayer1_FrequencyCutOff;
 
         settings.TonePlayer2_IsEnabled = TonePlayer2_IsEnabled;
         settings.TonePlayer2_MaxFrequency = TonePlayer2_MaxFrequency;
         settings.TonePlayer2_SoundsDeviceIndex = TonePlayer2_SoundsDeviceIndex;
         settings.TonePlayer2_ToneType = (int)TonePlayer2_ToneType;
         settings.TonePlayer2_PulseDuration = TonePlayer2_PulseDuration;
+        settings.TonePlayer2_FrequencyCutOff = TonePlayer2_FrequencyCutOff;
 
         settings.LogFolder = LogFolder;
 
@@ -129,6 +160,8 @@ class Settings : INotifyPropertyChanged
 
     static Settings? _instance = null;
 
+    int _tonePlayer1_PulseDuration = 0;
+    int _tonePlayer2_PulseDuration = 0;
     string _logFolder = "";
 
 #pragma warning disable CS8618
@@ -182,12 +215,14 @@ class Settings : INotifyPropertyChanged
         TonePlayer1_SoundsDeviceIndex = settings.TonePlayer1_SoundsDeviceIndex;
         TonePlayer1_ToneType = (ToneType)settings.TonePlayer1_ToneType;
         TonePlayer1_PulseDuration = settings.TonePlayer1_PulseDuration;
+        TonePlayer1_FrequencyCutOff = settings.TonePlayer1_FrequencyCutOff;
 
         TonePlayer2_IsEnabled = settings.TonePlayer2_IsEnabled;
         TonePlayer2_MaxFrequency = settings.TonePlayer2_MaxFrequency;
         TonePlayer2_SoundsDeviceIndex = settings.TonePlayer2_SoundsDeviceIndex;
         TonePlayer2_ToneType = (ToneType)settings.TonePlayer2_ToneType;
         TonePlayer2_PulseDuration = settings.TonePlayer2_PulseDuration;
+        TonePlayer2_FrequencyCutOff = settings.TonePlayer2_FrequencyCutOff;
 
         _logFolder = settings.LogFolder;
     }

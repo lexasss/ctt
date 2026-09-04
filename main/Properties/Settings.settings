@@ -86,5 +86,11 @@
     <Setting Name="ProperTrackingDurationThreshold" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
+    <Setting Name="TonePlayer1_FrequencyCutOff" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="TonePlayer2_FrequencyCutOff" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

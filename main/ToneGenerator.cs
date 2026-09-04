@@ -62,7 +62,7 @@ internal class ToneGenerator : ISampleProvider
         int outIndex = offset;
         int sampleCount = count / WaveFormat.Channels;
 
-        var freq = _mode == Mode.Continuos ? Math.Abs(Frequency) : PULSE_FREQUENCY;
+        var freq = Math.Abs(Frequency);
 
         //_tonePulseInterval = Math.Min(MAX_PULSE_INTERVAL, 50 * MAX_PULSE_INTERVAL / Math.Abs(Frequency));
         _tonePulseInterval = Math.Min(MAX_PULSE_INTERVAL, MAX_PULSE_INTERVAL / Math.Exp(0.005 * Math.Abs(Frequency)));
@@ -118,7 +118,6 @@ internal class ToneGenerator : ISampleProvider
     const double TWO_PI = 2 * Math.PI;
     const double PI_2 = Math.PI / 2;
 
-    const double PULSE_FREQUENCY = 200;
     const double MAX_PULSE_INTERVAL = 3000;
 
     readonly double _stepDuration;  // ms

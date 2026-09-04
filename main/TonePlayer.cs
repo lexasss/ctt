@@ -32,6 +32,7 @@ public class TonePlayer : IDisposable
         get => _toneGenerator.PulseDuration;
         set => _toneGenerator.PulseDuration = value;
     }
+    public double FrequencyCutOff { get; set; } = 0;
 
 
     public TonePlayer(string name)
@@ -71,14 +72,18 @@ public class TonePlayer : IDisposable
     }
 
     /// <summary>
-    /// Sets the sine frequence from 0 Hz to <see cref="MaxFrequency"/> Hz,
+    /// Sets the tone frequence from <see cref="FrequencyCutOff"/> Hz to <see cref="MaxFrequency"/> Hz,
     /// or affects the pulse interval if <see cref="TonePulseDuration"/> is >0.
     /// </summary>
     /// <param name="factor">-1..1: negative parameter values affect the left channel,
     /// and positive values affect the right channel</param>
     public void SetPitchFactor(double factor)
     {
-        _toneGenerator.Frequency = factor * MaxFrequency;
+        _toneGenerator.Frequency = 
+            factor * (MaxFrequency - FrequencyCutOff) +
+            Math.Sign(factor) * FrequencyCutOff;
+
+        //_toneGenerator.Frequency = factor * MaxFrequency;
         //_toneGenerator.Frequency = Math.Sign(factor) * Math.Exp(Math.Abs(factor) * 3.5 - 2.5) * MaxFrequency / Math.E;
     }
 
@@ -94,6 +99,7 @@ public class TonePlayer : IDisposable
                 SoundsDeviceIndex = (int)settings[$"{name}_{nameof(SoundsDeviceIndex)}"],
                 ToneType = (ToneType)(int)settings[$"{name}_{nameof(ToneType)}"],
                 PulseDuration = (int)settings[$"{name}_{nameof(PulseDuration)}"],
+                FrequencyCutOff = (double)settings[$"{name}_{nameof(FrequencyCutOff)}"],
             };
         }
         catch

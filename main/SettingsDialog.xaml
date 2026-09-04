@@ -23,6 +23,7 @@
         <local:PathUIConverter x:Key="pathUI"/>
         <local:InputTypeToBoolConverter x:Key="input2bool"/>
         <local:ItemIndexToSoundDeviceIndexConverter x:Key="item2sound"/>
+        <local:EnumToBooleanConverter x:Key="EnumToBoolean"/>
 
         <ObjectDataProvider x:Key="inputTypes" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
@@ -384,6 +385,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.Resources>
                         <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
@@ -403,9 +405,69 @@
                               Content="Tone #2"
                               IsChecked="{Binding TonePlayer2_IsEnabled, Mode=TwoWay}"/>
 
-                    <Label Grid.Row="1" Grid.Column="0">Max frequency, Hz</Label>
-                    <TextBox x:Name="txbTonePlayer1_MaxFrequency"
+                    <Label Grid.Row="1" Grid.Column="0">Min frequency, Hz</Label>
+                    <TextBox x:Name="txbTonePlayer1_FrequencyCutOff"
                              Grid.Row="1" Grid.Column="1"
+                             ToolTip="The starting frequency in the continuous mode.">
+                        <TextBox.Text>
+                            <Binding Path="TonePlayer1_FrequencyCutOff" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="0" Max="500" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}" Value="True" />
+                                            <Condition Binding="{Binding TonePlayer1_Mode,
+                                                       Converter={StaticResource EnumToBoolean},
+                                                       ConverterParameter={x:Static local:ToneMode.Continuos}}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <TextBox x:Name="txbTonePlayer2_FrequencyCutOff"
+                             Grid.Row="1" Grid.Column="2"
+                             ToolTip="The starting frequency in the continuous mode.">
+                        <TextBox.Text>
+                            <Binding Path="TonePlayer2_FrequencyCutOff" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
+                                <Binding.ValidationRules>
+                                    <local:RangeRule Min="0" Max="500" ValidatesOnTargetUpdated="True"/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}" Value="True" />
+                                            <Condition Binding="{Binding TonePlayer2_Mode,
+                                                       Converter={StaticResource EnumToBoolean},
+                                                       ConverterParameter={x:Static local:ToneMode.Continuos}}" Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="IsEnabled" Value="True"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    <Label Grid.Row="2" Grid.Column="0"
+                           Content="Max frequency, Hz"/>
+                    <TextBox x:Name="txbTonePlayer1_MaxFrequency"
+                             Grid.Row="2" Grid.Column="1"
                              IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}">
                         <TextBox.Text>
                             <Binding Path="TonePlayer1_MaxFrequency" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
@@ -414,9 +476,16 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <TextBlock>
+                                <Run>The maximum frequency in the continuous mode,</Run>
+                                <LineBreak/>
+                                <Run>or the frequency of pulses in the pulse mode.</Run>
+                            </TextBlock>
+                        </TextBox.ToolTip>
                     </TextBox>
                     <TextBox x:Name="txbTonePlayer2_MaxFrequency"
-                             Grid.Row="1" Grid.Column="2"
+                             Grid.Row="2" Grid.Column="2"
                              IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}">
                         <TextBox.Text>
                             <Binding Path="TonePlayer2_MaxFrequency" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
@@ -425,35 +494,41 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <TextBlock>
+                                <Run>The maximum frequency in the continuous mode,</Run>
+                                <LineBreak/>
+                                <Run>or the frequency of pulses in the pulse mode.</Run>
+                            </TextBlock>
+                        </TextBox.ToolTip>
                     </TextBox>
 
-                    <Label Grid.Row="2" Grid.Column="0">Playback device</Label>
-                    <ComboBox Grid.Row="2" Grid.Column="1"
+                    <Label Grid.Row="3" Grid.Column="0">Playback device</Label>
+                    <ComboBox Grid.Row="3" Grid.Column="1"
                               HorizontalAlignment="Right"
                               IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}"
                               ItemsSource="{Binding Source={StaticResource soundDevices}}"
                               SelectedIndex="{Binding TonePlayer1_SoundsDeviceIndex, Converter={StaticResource item2sound}}"/>
-                    <ComboBox Grid.Row="2" Grid.Column="2"
+                    <ComboBox Grid.Row="3" Grid.Column="2"
                               HorizontalAlignment="Right"
                               IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}"
                               ItemsSource="{Binding Source={StaticResource soundDevices}}"
                               SelectedIndex="{Binding TonePlayer2_SoundsDeviceIndex, Converter={StaticResource item2sound}}"/>
 
-                    <Label Grid.Row="3" Grid.Column="0">Tone type</Label>
-                    <ComboBox Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right"
+                    <Label Grid.Row="4" Grid.Column="0">Tone type</Label>
+                    <ComboBox Grid.Row="4" Grid.Column="1" HorizontalAlignment="Right"
                               IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}"
                               ItemsSource="{Binding Source={StaticResource toneType}}"
                               SelectedItem="{Binding TonePlayer1_ToneType}"/>
-                    <ComboBox Grid.Row="3" Grid.Column="2" HorizontalAlignment="Right"
+                    <ComboBox Grid.Row="4" Grid.Column="2" HorizontalAlignment="Right"
                               IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}"
                               ItemsSource="{Binding Source={StaticResource toneType}}"
                               SelectedItem="{Binding TonePlayer2_ToneType}"/>
 
-                    <Label Grid.Row="4" Grid.Column="0">Pulse duration, ms</Label>
+                    <Label Grid.Row="5" Grid.Column="0">Pulse duration, ms</Label>
                     <TextBox x:Name="txbTonePlayer1_PulseDuration"
-                             Grid.Row="4" Grid.Column="1"
-                             IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}"
-                             ToolTip="Set to 0 to keep the tone continuous">
+                             Grid.Row="5" Grid.Column="1"
+                             IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer1_IsEnabled}">
                         <TextBox.Text>
                             <Binding Path="TonePlayer1_PulseDuration" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -461,11 +536,21 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <TextBlock>
+                                <Run>Set to 0 to keep the tone continuous with</Run>
+                                <LineBreak/>
+                                <Run>tone frequency proportional to the line offset,</Run>
+                                <LineBreak/>
+                                <Run>otherwise the frequency of beeps of this length.</Run>
+                                <LineBreak/>
+                                <Run>will be proportional to the line offset.</Run>
+                            </TextBlock>
+                        </TextBox.ToolTip>
                     </TextBox>
                     <TextBox x:Name="txbTonePlayer2_PulseDuration"
-                             Grid.Row="4" Grid.Column="2"
-                             IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}"
-                             ToolTip="Set to 0 to keep the tone continuous">
+                             Grid.Row="5" Grid.Column="2"
+                             IsEnabled="{Binding IsChecked, ElementName=chkTonePlayer2_IsEnabled}">
                         <TextBox.Text>
                             <Binding Path="TonePlayer2_PulseDuration" UpdateSourceTrigger="PropertyChanged" Mode="TwoWay">
                                 <Binding.ValidationRules>
@@ -473,6 +558,17 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
+                        <TextBox.ToolTip>
+                            <TextBlock>
+                                <Run>Set to 0 to keep the tone continuous with</Run>
+                                <LineBreak/>
+                                <Run>tone frequency proportional to the line offset,</Run>
+                                <LineBreak/>
+                                <Run>otherwise the frequency of beeps of this length.</Run>
+                                <LineBreak/>
+                                <Run>will be proportional to the line offset.</Run>
+                            </TextBlock>
+                        </TextBox.ToolTip>
                     </TextBox>
                 </Grid>
 
@@ -524,8 +620,10 @@
                                         <Condition Binding="{Binding ElementName=txbOffsetGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbInputGain, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbNoiseGain, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbTonePlayer1_FrequencyCutOff, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbTonePlayer1_MaxFrequency, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbTonePlayer1_PulseDuration, Path=(Validation.HasError)}" Value="False" />
+                                        <Condition Binding="{Binding ElementName=txbTonePlayer2_FrequencyCutOff, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbTonePlayer2_MaxFrequency, Path=(Validation.HasError)}" Value="False" />
                                         <Condition Binding="{Binding ElementName=txbTonePlayer2_PulseDuration, Path=(Validation.HasError)}" Value="False" />
                                     </MultiDataTrigger.Conditions>

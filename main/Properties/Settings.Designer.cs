@@ -358,5 +358,29 @@ namespace CTT.Properties {
                 this["ProperTrackingDurationThreshold"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double TonePlayer1_FrequencyCutOff {
+            get {
+                return ((double)(this["TonePlayer1_FrequencyCutOff"]));
+            }
+            set {
+                this["TonePlayer1_FrequencyCutOff"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public double TonePlayer2_FrequencyCutOff {
+            get {
+                return ((double)(this["TonePlayer2_FrequencyCutOff"]));
+            }
+            set {
+                this["TonePlayer2_FrequencyCutOff"] = value;
+            }
+        }
     }
 }

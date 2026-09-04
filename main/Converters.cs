@@ -162,3 +162,35 @@ class ItemIndexToSoundDeviceIndexConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) =>
         (int)value - 1;
 }
+
+[ValueConversion(typeof(Enum), typeof(bool))]
+internal class EnumToBooleanConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType,
+                          object parameter, CultureInfo culture)
+    {
+        return value?.Equals(parameter) == true;
+    }
+
+    public object ConvertBack(object value, Type targetType,
+                              object parameter, CultureInfo culture)
+    {
+        return (bool)value ? parameter : Binding.DoNothing;
+    }
+}
+
+[ValueConversion(typeof(Enum), typeof(Visibility))]
+internal class EnumToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType,
+                          object parameter, CultureInfo culture)
+    {
+        return value?.Equals(parameter) == true ? Visibility.Visible : Visibility.Hidden;
+    }
+
+    public object ConvertBack(object value, Type targetType,
+                              object parameter, CultureInfo culture)
+    {
+        return (Visibility)value == Visibility.Visible ? parameter : Binding.DoNothing;
+    }
+}
