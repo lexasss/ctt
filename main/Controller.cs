@@ -106,8 +106,7 @@ class Controller : INotifyPropertyChanged
             return;
 
         _noisePhase += K_NOISE_PHASE_STEP;
-        var noise = (Math.Cos(_noisePhase) * 2 - 1) +
-                 (Math.Cos(_noisePhase * 2) * 2 - 1) / 2;
+        var noise = Math.Cos(_noisePhase) * 2 + Math.Cos(_noisePhase * 2) / 2;
 
         var inputValue = _orientation == Orientation.Horizontal ? input.X : input.Y;
         var speed = (_offset * _settings.OffsetGain + inputValue * _settings.InputGain + noise * _settings.NoiseGain) * _lambda / _ref;
