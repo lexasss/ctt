@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using Server.Tools;
+using System.IO;
 using System.Windows;
 
 namespace CTT;
@@ -24,7 +25,7 @@ internal class Logger
     /// <param name="items">any data to save into a single record</param>
     public void Add(params object[] items)
     {
-        var record = string.Join('\t', [DateTime.Now.Ticks, ..items]);
+        var record = string.Join('\t', [TimestampSource.Timestamp, ..items]);
 
         lock (_records)
         {

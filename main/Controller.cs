@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Server.Tools;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -135,17 +136,17 @@ class Controller : INotifyPropertyChanged
             UpdateDistanceCategory(isFar);
         }
 
-        TrackingDuration = TimeSpan.FromSeconds((DateTime.Now.Ticks - _trackingStartTime) / 10_000_000).ToString();
+        TrackingDuration = TimeSpan.FromMilliseconds(TimestampSource.Timestamp - _trackingStartTime).ToString();
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingDuration)));
 
         if (Math.Abs(_offset) >= (_settings.FarThreshold / (_settings.FieldSize / 2))) // not properly tracking
         {
-            _properTrackingStartTime = DateTime.Now.Ticks;
+            _properTrackingStartTime = TimestampSource.Timestamp;
             _lastProperTrackingDuration = 0;
         }
         else
         {
-            _lastProperTrackingDuration = (DateTime.Now.Ticks - _properTrackingStartTime) / 10_000_000;
+            _lastProperTrackingDuration = (double)(TimestampSource.Timestamp - _properTrackingStartTime) / 1000; // to seconds
         }
 
         if (_lastProperTrackingDuration != ProperTrackingDuration)
@@ -207,12 +208,12 @@ class Controller : INotifyPropertyChanged
         _ref = _settings.FieldSize / 2;
         _offset = 0;
 
-        _properTrackingStartTime = DateTime.Now.Ticks;
+        _properTrackingStartTime = TimestampSource.Timestamp;
         _lastProperTrackingDuration = 0;
         ProperTrackingDuration = 0;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProperTrackingDuration)));
 
-        _trackingStartTime = DateTime.Now.Ticks;
+        _trackingStartTime = _properTrackingStartTime;
         TrackingDuration = "0:00";
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TrackingDuration)));
 
